@@ -1,4 +1,4 @@
-package com.lucas.xaudio.custom;
+package com.lucas.audioSample.custom;
 
 import android.app.Service;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import com.lucas.xaudio.mediaplayer.events.AudioProgressEvent;
 import com.lucas.xaudio.mediaplayer.events.AudioReleaseEvent;
 import com.lucas.xaudio.mediaplayer.view.MusicNotificationHelper;
 import com.lucas.xaudio.mediaplayer.view.NotificationHelperListener;
-import com.lucas.xaudio.view.XMusicPlayerActivity;
+import com.lucas.audioSample.view.XMusicPlayerActivity;
 
 import androidx.annotation.Nullable;
 

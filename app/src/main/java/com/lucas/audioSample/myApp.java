@@ -1,11 +1,11 @@
-package com.lucas.xaudio.app;
+package com.lucas.audioSample;
 
 import android.app.Application;
 
 import com.lucas.xaudio.XAudio;
 
 
-public class XMsuicApp extends Application {
+public class myApp extends Application {
 
 
 

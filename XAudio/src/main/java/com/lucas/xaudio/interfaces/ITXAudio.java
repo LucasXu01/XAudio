@@ -1,7 +1,5 @@
 package com.lucas.xaudio.interfaces;
 
-import android.app.Activity;
-
 import com.lucas.xaudio.mediaplayer.core.AudioController;
 import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;
 import com.lucas.xaudio.mediaplayer.model.AudioBean;

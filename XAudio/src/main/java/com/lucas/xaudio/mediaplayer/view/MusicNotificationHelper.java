@@ -8,20 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.widget.RemoteViews;
+
 import com.lucas.xaudio.R;
 import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.mediaplayer.BroadcastReceiver.NotificationReceiver;
 import com.lucas.xaudio.mediaplayer.core.AudioController;
 import com.lucas.xaudio.mediaplayer.image_loader.ImageLoaderManager;
 import com.lucas.xaudio.mediaplayer.model.AudioBean;
 import androidx.core.app.NotificationCompat;
-
-import static com.lucas.xaudio.XAudio.ACTION_STATUS_BAR;
-import static com.lucas.xaudio.XAudio.EXTRA;
-import static com.lucas.xaudio.XAudio.EXTRA_CLOSE;
-import static com.lucas.xaudio.XAudio.EXTRA_FAV;
-import static com.lucas.xaudio.XAudio.EXTRA_PLAY;
-import static com.lucas.xaudio.XAudio.EXTRA_PRE;
 
 /**
  * 音乐Notification帮助类
@@ -116,8 +109,8 @@ public class MusicNotificationHelper {
     mSmallRemoteViews.setTextViewText(R.id.tip_view, mAudioBean.album);
 
     //点击播放按钮广播
-    Intent playIntent = new Intent(ACTION_STATUS_BAR);
-    playIntent.putExtra(EXTRA, EXTRA_PLAY);
+    Intent playIntent = new Intent(XAudio.ACTION_STATUS_BAR);
+    playIntent.putExtra(XAudio.EXTRA, XAudio.EXTRA_PLAY);
     PendingIntent playPendingIntent =
             PendingIntent.getBroadcast(XAudio.getInstance().getContext(), 1, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     mRemoteViews.setOnClickPendingIntent(R.id.play_view, playPendingIntent);
@@ -126,8 +119,8 @@ public class MusicNotificationHelper {
     mSmallRemoteViews.setImageViewResource(R.id.play_view, R.mipmap.note_btn_play_white);
 
     //点击上一首按钮广播
-    Intent previousIntent = new Intent(ACTION_STATUS_BAR);
-    previousIntent.putExtra(EXTRA, EXTRA_PRE);
+    Intent previousIntent = new Intent(XAudio.ACTION_STATUS_BAR);
+    previousIntent.putExtra(XAudio.EXTRA, XAudio.EXTRA_PRE);
     PendingIntent previousPendingIntent =
         PendingIntent.getBroadcast(XAudio.getInstance().getContext(), 2, previousIntent,
             PendingIntent.FLAG_UPDATE_CURRENT);
@@ -135,8 +128,8 @@ public class MusicNotificationHelper {
     mRemoteViews.setImageViewResource(R.id.previous_view, R.mipmap.note_btn_pre_white);
 
     //点击下一首按钮广播
-    Intent nextIntent = new Intent(ACTION_STATUS_BAR);
-    nextIntent.putExtra(EXTRA, EXTRA_PRE);
+    Intent nextIntent = new Intent(XAudio.ACTION_STATUS_BAR);
+    nextIntent.putExtra(XAudio.EXTRA, XAudio.EXTRA_PRE);
     PendingIntent nextPendingIntent =
         PendingIntent.getBroadcast(XAudio.getInstance().getContext(), 3, nextIntent,
             PendingIntent.FLAG_UPDATE_CURRENT);
@@ -146,16 +139,16 @@ public class MusicNotificationHelper {
     mSmallRemoteViews.setImageViewResource(R.id.next_view, R.mipmap.note_btn_next_white);
 
     //点击收藏按钮广播
-    Intent favouriteIntent = new Intent(ACTION_STATUS_BAR);
-    favouriteIntent.putExtra(EXTRA, EXTRA_FAV);
+    Intent favouriteIntent = new Intent(XAudio.ACTION_STATUS_BAR);
+    favouriteIntent.putExtra(XAudio.EXTRA, XAudio.EXTRA_FAV);
     PendingIntent favouritePendingIntent =
         PendingIntent.getBroadcast(XAudio.getInstance().getContext(), 4, favouriteIntent,
             PendingIntent.FLAG_UPDATE_CURRENT);
     mRemoteViews.setOnClickPendingIntent(R.id.favourite_view, favouritePendingIntent);
 
     //点击关闭按钮
-    Intent closeIntent = new Intent(ACTION_STATUS_BAR);
-    closeIntent.putExtra(EXTRA, EXTRA_CLOSE);
+    Intent closeIntent = new Intent(XAudio.ACTION_STATUS_BAR);
+    closeIntent.putExtra(XAudio.EXTRA, XAudio.EXTRA_CLOSE);
     PendingIntent closePendingIntent =
             PendingIntent.getBroadcast(XAudio.getInstance().getContext(), 5, closeIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);

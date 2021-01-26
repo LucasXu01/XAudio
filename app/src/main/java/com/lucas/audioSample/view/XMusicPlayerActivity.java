@@ -1,4 +1,4 @@
-package com.lucas.xaudio.view;
+package com.lucas.audioSample.view;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.lucas.xaudio.R;
+import com.lucas.audioSample.R;
 import com.lucas.xaudio.XAudio;
 import com.lucas.xaudio.interfaces.AudioServiceListener;
 import com.lucas.xaudio.mediaplayer.core.AudioController;

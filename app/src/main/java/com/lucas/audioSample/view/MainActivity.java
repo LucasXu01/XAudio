@@ -1,16 +1,21 @@
-package com.lucas.xaudio.view;
+package com.lucas.audioSample.view;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.lucas.xaudio.R;
+import com.lucas.audioSample.R;
 import com.lucas.xaudio.XAudio;
 import com.lucas.xaudio.mediaplayer.model.AudioBean;
-import com.lucas.xaudio.custom.CustomMusicService;
+import com.lucas.audioSample.custom.CustomMusicService;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,6 +42,19 @@ public class MainActivity extends AppCompatActivity {
     //点击事件
     private void initMethod() {
 
+        PermissionX.init(this)
+                .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO)
+                .request(new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
+                        if (allGranted) {
+//                            Toast.makeText(MainActivity.this, "All permissions are granted", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
         //简单使用
         bt_simple_use.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         bt_music_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this, MusicPlayerActivity.class));
+                startActivity(new Intent(MainActivity.this, RecordSampleActivity.class));
             }
         });
 

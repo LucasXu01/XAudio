@@ -22,6 +22,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -31,19 +46,58 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    compileOnly 'org.greenrobot:eventbus:3.2.0'
+    api 'org.greenrobot:eventbus:3.2.0'
 
     //占位主工程android原生库
-    compileOnly rootProject.depsLibs.appcompact
-    compileOnly rootProject.depsLibs.recyclerview
-    compileOnly rootProject.depsLibs.design
+    api 'androidx.appcompat:appcompat:1.0.0'
+    api 'androidx.recyclerview:recyclerview:1.0.0'
+    api 'com.google.android.material:material:1.0.0'
 
 
-    compileOnly "com.github.bumptech.glide:glide:4.9.0"
+    api "com.github.bumptech.glide:glide:4.9.0"
 
     //占位主工程rxjava
-    compileOnly rootProject.depsLibs.rxjava
-    compileOnly rootProject.depsLibs.rxandroid
+    api "io.reactivex.rxjava2:rxjava:2.2.9"
+    api "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "com.danikula:videocache:2.7.1"
 
 
 }
+
+
+
+//================================bintray 上传插件配置 start=========================================
+apply plugin: 'com.github.panpf.bintray-publish'
+
+//防止中文注释出现错误
+allprojects {
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        //上传插件
+        classpath 'com.github.panpf.bintray-publish:bintray-publish:1.0.0'
+    }
+}
+
+//下面这些配置换成你自己的即可
+publish {
+    userOrg = "lucasxu"
+    repoName = 'maven' //Bintray上创建的仓库名,如果你创建的是maven,则可以干掉这一行,否则需要指定仓库名
+    groupId = 'com.lucas.xaudio'
+    artifactId = 'xaudio'
+    publishVersion = '0.0.1'
+    desc = 'Make Android audio use easy'
+    website = 'https://github.com/LucasXu01/XAudio'
+}
+//================================bintray 上传插件配置 end=========================================
+
+
+

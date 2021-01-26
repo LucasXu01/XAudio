@@ -2,6 +2,8 @@ package com.lucas.xaudio.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import java.util.List;
 
@@ -43,7 +45,6 @@ public class XMusicUtils {
     }
     return false;
   }
-
 
 }
 

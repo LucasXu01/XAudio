@@ -24,11 +24,10 @@
         android:id="@+id/bt_music_play"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="15dp"
-        android:text="常见的音乐播放器"
-        />
+        android:text="mp3录音" />
 
     <Button
         android:id="@+id/bt_xmusic_play"

@@ -1,4 +1,4 @@
-package com.lucas.xaudio;
+package com.lucas.audioSample;
 
 import android.content.Context;
 

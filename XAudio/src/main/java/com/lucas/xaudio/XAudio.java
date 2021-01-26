@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.lucas.xaudio.interfaces.AudioServiceListener;
-import com.lucas.xaudio.interfaces.ITXAudio;
 import com.lucas.xaudio.mediaplayer.core.AudioController;
 import com.lucas.xaudio.mediaplayer.core.MusicService;
+import com.lucas.xaudio.interfaces.AudioServiceListener;
+import com.lucas.xaudio.interfaces.ITXAudio;
 import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;
 import com.lucas.xaudio.mediaplayer.events.AudioLoadEvent;
 import com.lucas.xaudio.mediaplayer.events.AudioPauseEvent;
@@ -45,7 +45,7 @@ public final class XAudio implements ITXAudio {
     private static Context mContext; //SDK全局Context
     private static List<AudioServiceListener> sAudioServiceListeners = new ArrayList<>();
     private Service mService;
-    private Intent notificationInetnt;
+    private Intent notificationIntent;
 
     /**
      * 在主Application中调用
@@ -87,11 +87,11 @@ public final class XAudio implements ITXAudio {
      * 设置通知栏的意图
      */
     public XAudio setNotificationIntent(Intent intent){
-        this.notificationInetnt = intent;
+        this.notificationIntent = intent;
         return this;
     }
     public Intent getNotificationIntent(){
-        return notificationInetnt;
+        return notificationIntent;
     }
 
     /**
