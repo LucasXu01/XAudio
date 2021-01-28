@@ -7,7 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 
 
-import com.lucas.xaudio.recorder.mp3recorder.util.LameUtil;
+import com.lucas.xaudio.recorder.XLame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
 public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRecordPositionUpdateListener {
     private StopHandler mHandler;
@@ -117,7 +119,14 @@ public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRec
             Task task = mTasks.remove(0);
             short[] buffer = task.getData();
             int readSize = task.getReadSize();
-            int encodedSize = LameUtil.encode(buffer, buffer, readSize, mMp3Buffer);
+
+//            String text = "ffmpeg -y -i /storage/emulated/0/1/input.mp4 -vf boxblur=25:5 -preset superfast /storage/emulated/0/1/result.mp4";
+//            String[] commands = text.split(" ");
+//            //开始同步执行FFmpeg命令
+//            RxFFmpegInvoke.getInstance().runCommand(command, null);
+
+
+            int encodedSize = XLame.encode(buffer, buffer, readSize, mMp3Buffer);
             if (encodedSize > 0) {
                 try {
                     mFileOutputStream.write(mMp3Buffer, 0, encodedSize);
@@ -135,7 +144,7 @@ public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRec
      */
     private void flushAndRelease() {
         //将MP3结尾信息写入buffer中
-        final int flushResult = LameUtil.flush(mMp3Buffer);
+        final int flushResult = XLame.flush(mMp3Buffer);
         if (flushResult > 0) {
             try {
                 mFileOutputStream.write(mMp3Buffer, 0, flushResult);
@@ -149,7 +158,7 @@ public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRec
                         e.printStackTrace();
                     }
                 }
-                LameUtil.close();
+                XLame.close();
             }
         }
     }

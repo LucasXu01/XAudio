@@ -24,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private Button bt_music_play;
     private Button bt_xmusic_play;
 
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +43,14 @@ public class MainActivity extends AppCompatActivity {
         initData();
         initMethod();
 
+        bt_simple_use.setText(stringFromJNI());
     }
 
     //点击事件
     private void initMethod() {
 
         PermissionX.init(this)
-                .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO)
+                .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
                 .request(new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
@@ -124,5 +131,10 @@ public class MainActivity extends AppCompatActivity {
                 .setAudioQueen(audioBeanList);
     }
 
+    /**
+     * A native method that is implemented by the 'native-lib' native library,
+     * which is packaged with this application.
+     */
+    public native String stringFromJNI();
 
 }

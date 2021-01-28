@@ -12,6 +12,12 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions"
+                cFlags "-DSTDC_HEADERS"
+            }
+        }
 
 
     }
@@ -20,6 +26,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.10.2"
         }
     }
 
@@ -60,6 +73,10 @@ dependencies {
     api "io.reactivex.rxjava2:rxjava:2.2.9"
     api "io.reactivex.rxjava2:rxandroid:2.1.1"
     implementation "com.danikula:videocache:2.7.1"
+
+
+    //完整版
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0'
 
 
 }
