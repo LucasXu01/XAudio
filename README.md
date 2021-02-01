@@ -10,8 +10,6 @@
 *
 
 
-[![](https://jitpack.io/v/CarGuo/RecordWave.svg)](https://jitpack.io/#CarGuo/RecordWave)
-
 
 #### 在你的项目project下的build.gradle添加
 ```
@@ -32,7 +30,7 @@ dependencies {
 　
 
 ## 效果显示
-<img src="https://github.com/LucasXu01/XAudio/01.jpg" width="240px" height="426px"/>
+<img src="./01.jpg" width="240px" height="426px"/>
 　
 
 ### 使用方法请参考demo
