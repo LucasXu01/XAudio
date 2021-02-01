@@ -9,30 +9,22 @@ import java.io.Serializable;
  */
 public class AudioBean implements Serializable {
 
-    // TODO: 2021/1/12  id一定需要   最下面的相等需要用到  构造方法必须加上id的 
+    // TODO: 2021/1/12  id一定需要   最下面的相等需要用到  构造方法必须加上id的
+
     public String id;
     //地址
     public String mUrl;
-
     //歌名
     public String name;
-
     //作者
     public String author;
-
     //所属专辑
     public String album;
-
     public String albumInfo;
-
     //专辑封面
     public String albumPic;
-
     //时长
     public String totalTime;
-
-    public AudioBean() {
-    }
 
     public AudioBean(String mUrl) {
         this.mUrl = mUrl;

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.lucas.audioSample.R;
+import com.lucas.audioSample.utils.MyUtils;
 import com.lucas.xaudio.XAudio;
 import com.lucas.xaudio.mediaplayer.model.AudioBean;
 import com.lucas.audioSample.custom.CustomMusicService;
@@ -23,12 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Button bt_simple_use;
     private Button bt_music_play;
     private Button bt_xmusic_play;
-
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
-
+    private Button bt_record;
 
 
     @Override
@@ -39,15 +35,7 @@ public class MainActivity extends AppCompatActivity {
         bt_simple_use = findViewById(R.id.bt_simple_use);
         bt_music_play = findViewById(R.id.bt_music_play);
         bt_xmusic_play = findViewById(R.id.bt_xmusic_play);
-
-        initData();
-        initMethod();
-
-        bt_simple_use.setText(stringFromJNI());
-    }
-
-    //点击事件
-    private void initMethod() {
+        bt_record = findViewById(R.id.bt_record);
 
         PermissionX.init(this)
                 .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -55,86 +43,36 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                         if (allGranted) {
-//                            Toast.makeText(MainActivity.this, "All permissions are granted", Toast.LENGTH_LONG).show();
+                            // Toast.makeText(MainActivity.this, "All permissions are granted", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(MainActivity.this, "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
 
+
         //简单使用
-        bt_simple_use.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SimpleUseActivity.class));
-            }
+        bt_simple_use.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, SimpleUseActivity.class));
         });
 
         //简单的音乐播放器
-        bt_music_play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, RecordSampleActivity.class));
-            }
+        bt_music_play.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, RecordSampleActivity.class));
         });
 
         //简单的音乐播放器
-        bt_xmusic_play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                XMusicPlayerActivity.start(MainActivity.this);
-            }
+        bt_xmusic_play.setOnClickListener(v -> {
+            XMusicPlayerActivity.start(MainActivity.this);
         });
 
+        //录音
+        bt_record.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, AudioRecorderActivity.class));
+        });
+
+
     }
 
-    //初始化音乐数据
-    private void initData() {
-        ArrayList<AudioBean> audioBeanList = new ArrayList<>();
-
-        AudioBean audioBean1 = new AudioBean("100001",
-                "http://qiniu.yanfriends.com/obj_w5zDlMODwrDDiGjCn8Ky_3087361631_ea94_69e0_6a9e_c9e5b3d7a25d66f5b6b28ec92cdec944.mp3", "焰火青年",
-                "华北浪革",
-                "废柴",
-                "2019年盛夏，华北平原的小镇青年开始大声唱出自己的歌词，说说自己的心里话，第一张EP《废柴》。",
-                "http://qiniu.yanfriends.com/5d77a37b54143_426809737_1568121723.jpg",
-                "4:09"
-        );
-
-        AudioBean audioBean2 = new AudioBean("100002",
-                "http://qiniu.yanfriends.com/%E9%9D%92%E8%8A%B1%E7%93%B7.mp3", "青花瓷",
-                "周杰伦",
-                "我很忙",
-                "再忙 … 也要陪你听一首歌！",
-                "http://qiniu.yanfriends.com/T002R300x300M000002eFUFm2XYZ7z_1.jpg",
-                "4:00"
-        );
-
-        AudioBean audioBean3 = new AudioBean("100003",
-                "http://sr-sycdn.kuwo.cn/resource/n2/33/25/2629654819.mp3", "小情歌",
-                "五月天",
-                "小幸运",
-                "电影《不能说的秘密》主题曲,尤其以最美的不是下雨天,是与你一起躲过雨的屋檐最为经典",
-                "http://qiniu.yanfriends.com/timg.jpeg",
-                "4:26"
-        );
-
-        audioBeanList.add(audioBean1);
-        audioBeanList.add(audioBean2);
-        audioBeanList.add(audioBean3);
-
-
-        XAudio.getInstance()
-                .setNotificationIntent(new Intent(this, XMusicPlayerActivity.class)) //可选
-                .setAutoService()  //可选：不调用setAutoService不会有服务，不带参为自带的服务，或者根据需要填写自己的Service参
-                .setAutoService(new CustomMusicService())
-                .setAudioQueen(audioBeanList);
-    }
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
 
 }

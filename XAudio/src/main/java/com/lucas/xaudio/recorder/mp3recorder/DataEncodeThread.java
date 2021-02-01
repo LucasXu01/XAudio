@@ -8,6 +8,7 @@ import android.os.Message;
 
 
 import com.lucas.xaudio.recorder.XLame;
+import com.lucas.xaudio.recorder.aac.AACEncode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -119,12 +120,6 @@ public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRec
             Task task = mTasks.remove(0);
             short[] buffer = task.getData();
             int readSize = task.getReadSize();
-
-//            String text = "ffmpeg -y -i /storage/emulated/0/1/input.mp4 -vf boxblur=25:5 -preset superfast /storage/emulated/0/1/result.mp4";
-//            String[] commands = text.split(" ");
-//            //开始同步执行FFmpeg命令
-//            RxFFmpegInvoke.getInstance().runCommand(command, null);
-
 
             int encodedSize = XLame.encode(buffer, buffer, readSize, mMp3Buffer);
             if (encodedSize > 0) {

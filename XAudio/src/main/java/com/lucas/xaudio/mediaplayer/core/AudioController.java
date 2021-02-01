@@ -173,6 +173,24 @@ public class AudioController {
     }
   }
 
+  public void removeAudio(AudioBean bean) {
+    if (mQueue == null) {
+      throw new AudioQueueEmptyException("当前播放队列为空,请先设置播放队列.");
+    }
+   for(AudioBean audioBean : mQueue){
+     if(audioBean.id.equals(bean.id)){
+       mQueue.remove(bean);
+     }
+   }
+  }
+
+  public void clearAudio() {
+    if (mQueue == null) {
+      throw new AudioQueueEmptyException("当前播放队列为空,请先设置播放队列.");
+    }
+    mQueue.clear();
+  }
+
   public void setPlayIndex(int index) {
     if (mQueue == null) {
       throw new AudioQueueEmptyException("当前播放队列为空,请先设置播放队列.");

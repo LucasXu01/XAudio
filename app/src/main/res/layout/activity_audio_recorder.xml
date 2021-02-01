@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/mr_tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Audio Record 例子"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/mr_tvOutputFormat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="输出格式："
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mr_tvTitle" />
+
+    <RadioGroup
+        android:id="@+id/mr_rgOutputFormat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mr_tvOutputFormat">
+
+        <RadioButton
+            android:id="@+id/mr_rbOutputFormat_aac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="aac"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbOutputFormat_mp3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="mp3"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbOutputFormat_wav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="wav"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbOutputFormat_pcm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pcm"
+            android:textSize="10sp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/mr_tvSamplingRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="采样率："
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mr_rgOutputFormat" />
+
+    <RadioGroup
+        android:id="@+id/mr_rgSamplingRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mr_tvSamplingRate">
+
+        <RadioButton
+            android:id="@+id/mr_rbSamplingRate_800"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="800Hz"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbSamplingRate_1600"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1600Hz"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbSamplingRate_44100"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="44100Hz"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbSamplingRate_48000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="48000Hz"
+            android:textSize="10sp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/mr_tvBitrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="比特率："
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mr_rgSamplingRate" />
+
+    <RadioGroup
+        android:id="@+id/mr_rgBitrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mr_tvBitrate">
+
+        <RadioButton
+            android:id="@+id/mr_rbBitrate_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8Bit"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbBitrate_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="16Bit"
+            android:textSize="10sp" />
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/mr_tvChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="单/多声道"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mr_rgBitrate" />
+
+    <RadioGroup
+        android:id="@+id/mr_rgChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mr_tvChannel">
+
+        <RadioButton
+            android:id="@+id/mr_rbChannel_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mono"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbChannel_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Stereo"
+            android:textSize="10sp" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/mr_ll_audio_recorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteY="344dp"
+        >
+
+        <Button
+            android:id="@+id/mr_btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Start"
+            android:textAllCaps="false"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/mr_btnPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="Pause"
+            android:textAllCaps="false"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/mr_btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="Stop"
+            android:textAllCaps="false"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

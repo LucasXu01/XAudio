@@ -12,9 +12,9 @@ public interface ITXAudio {
      * 添加音频 
      * 注意：必须先setQueen，才能继续add，否则会报queen null
      */
-    void setAudioQueen(ArrayList<AudioBean> queue);
-    void addAudio(AudioBean bean);
-    void addAudio(ArrayList<AudioBean> queue);
+    ITXAudio setAudioQueen(ArrayList<AudioBean> queue);
+    ITXAudio addAudio(AudioBean bean);
+    ITXAudio addAudio(ArrayList<AudioBean> queue);
     
     /**
      * 播放 音频
@@ -65,6 +65,18 @@ public interface ITXAudio {
      * 喜欢曲子
      */
     void onAudioFavouriteEvent(AudioFavouriteEvent event);
+
+    /**
+     * 移除某个曲子
+     */
+    void removeAudio(AudioBean audioBean);
+
+    /**
+     * 移除所有曲子
+     */
+    void clearAudio();
+
+
 
 
 }

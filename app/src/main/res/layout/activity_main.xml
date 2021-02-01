@@ -4,21 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity"
-    android:orientation="vertical"
     android:gravity="center_horizontal"
-    >
+    android:orientation="vertical"
+    tools:context=".view.MainActivity">
 
     <Button
         android:id="@+id/bt_simple_use"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="15dp"
-        android:text="简单使用"
-        />
+        android:text="简单使用" />
 
+    <Button
+        android:id="@+id/bt_xmusic_play"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="15dp"
+        android:text="音乐播放器" />
 
     <Button
         android:id="@+id/bt_music_play"
@@ -30,14 +36,13 @@
         android:text="mp3录音" />
 
     <Button
-        android:id="@+id/bt_xmusic_play"
+        android:id="@+id/bt_record"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="15dp"
-        android:text="音乐播放器"
-        />
+        android:text="录音" />
 
 
 </LinearLayout>

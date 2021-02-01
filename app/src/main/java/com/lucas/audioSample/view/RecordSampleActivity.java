@@ -1,9 +1,15 @@
 package com.lucas.audioSample.view;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import static com.lucas.audioSample.utils.MyUtils.getScreenWidth;
 
 public class RecordSampleActivity extends AppCompatActivity {
 
@@ -67,25 +75,26 @@ public class RecordSampleActivity extends AppCompatActivity {
 
         //暂停
         bt_record_pause.setOnClickListener(v->{
-
+            resolvePause();
         });
 
         //停止
         bt_record_stop.setOnClickListener(v->{
-
+            resolveStopRecord();
         });
 
         //播放
         bt_play.setOnClickListener(v->{
-
+            resolvePlayRecord();
         });
 
         //重置
         bt_reset.setOnClickListener(v->{
-
+            resolveResetPlay();
         });
 
         resolveNormalUI();
+
         audioPlayer = new AudioPlayer(this, new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -126,26 +135,28 @@ public class RecordSampleActivity extends AppCompatActivity {
             }
         }
 
-        int offset = MyUtils.dip2px(this, 1);
+        int offset = MyUtils.dip2px(this, 7);
         filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
         mRecorder = new MP3Recorder(new File(filePath));
-        int size = MyUtils.getScreenWidth(this) / offset;//控件默认的间隔是1
+        int size = getScreenWidth(this) / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
 
         //高级用法
-        //int size = (getScreenWidth(getActivity()) / 2) / dip2px(getActivity(), 1);
-        //mRecorder.setWaveSpeed(600);
-        //mRecorder.setDataList(audioWave.getRecList(), size);
-        //audioWave.setDrawStartOffset((getScreenWidth(getActivity()) / 2));
-        //audioWave.setDrawReverse(true);
-        //audioWave.setDataReverse(true);
+//        int size2 = (getScreenWidth(this) / 2) / MyUtils.dip2px(this, 1);
+//        mRecorder.setWaveSpeed(600);
+//        mRecorder.setDataList(audioWave.getRecList(), size2);
+//        audioWave.setDrawStartOffset((getScreenWidth(this) / 2));
+//        audioWave.setDrawReverse(true);
+//        audioWave.setDataReverse(true);
 
         //自定义paint
-        //Paint paint = new Paint();
-        //paint.setColor(Color.GRAY);
-        //paint.setStrokeWidth(4);
-        //audioWave.setLinePaint(paint);
-        //audioWave.setOffset(offset);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(6);
+        audioWave.setLinePaint(paint);
+        audioWave.setOffset(offset);   // 设置线与线之间的偏移
+        audioWave.setWaveCount(2);     // 1单边  2双边
+        audioWave.setDrawBase(false);  // 是否画出基线
 
         mRecorder.setErrorHandler(new Handler() {
             @Override
@@ -173,6 +184,53 @@ public class RecordSampleActivity extends AppCompatActivity {
         mIsRecord = true;
     }
 
+    /**
+     * 暂停
+     */
+    private void resolvePause() {
+        if (!mIsRecord)
+            return;
+        resolvePauseUI();
+        if (mRecorder.isPause()) {
+            resolveRecordUI();
+            audioWave.setPause(false);
+            mRecorder.setPause(false);
+            bt_record_pause.setText("暂停");
+        } else {
+            audioWave.setPause(true);
+            mRecorder.setPause(true);
+            bt_record_pause.setText("继续");
+        }
+    }
+
+    /**
+     * 停止录音
+     */
+    private void resolveStopRecord() {
+        resolveStopUI();
+        if (mRecorder != null && mRecorder.isRecording()) {
+            mRecorder.setPause(false);
+            mRecorder.stop();
+            audioWave.stopView();
+        }
+        mIsRecord = false;
+        bt_record_pause.setText("暂停");
+
+    }
+
+    /**
+     * 播放
+     */
+    private void resolvePlayRecord() {
+        if (TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
+            Toast.makeText(this, "文件不存在", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        playText.setText(" ");
+        mIsPlay = true;
+        audioPlayer.playUrl(filePath);
+        resolvePlayUI();
+    }
 
     /**
      * 录音异常
@@ -216,10 +274,35 @@ public class RecordSampleActivity extends AppCompatActivity {
         bt_reset.setEnabled(false);
     }
 
+    private void resolveStopUI() {
+        bt_record.setEnabled(true);
+        bt_record_stop.setEnabled(false);
+        bt_record_pause.setEnabled(false);
+        bt_play.setEnabled(true);
+        bt_reset.setEnabled(true);
+    }
+
+    private void resolvePlayUI() {
+        bt_record.setEnabled(false);
+        bt_record_stop.setEnabled(false);
+        bt_record_pause.setEnabled(false);
+        bt_play.setEnabled(true);
+        bt_reset.setEnabled(true);
+    }
+
+    private void resolvePauseUI() {
+        bt_record.setEnabled(false);
+        bt_record_pause.setEnabled(true);
+        bt_record_stop.setEnabled(false);
+        bt_play.setEnabled(false);
+        bt_reset.setEnabled(false);
+    }
+
     private String toTime(long time) {
         SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
         String dateString = formatter.format(time);
         return dateString;
     }
+
 
 }

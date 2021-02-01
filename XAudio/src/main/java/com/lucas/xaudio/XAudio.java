@@ -98,16 +98,19 @@ public final class XAudio implements ITXAudio {
      * 添加音频
      * 播放音频前必须先调用setAudioQueen，进行初始播放列表的填充
      */
-    public void addAudio(AudioBean bean) {
+    public XAudio addAudio(AudioBean bean) {
         AudioController.getInstance().addAudio(bean);
+        return this;
     }
 
-    public void addAudio(ArrayList<AudioBean> queue) {
+    public XAudio addAudio(ArrayList<AudioBean> queue) {
         AudioController.getInstance().addAudio(queue);
+        return this;
     }
 
-    public void setAudioQueen(ArrayList<AudioBean> queue) {
+    public XAudio setAudioQueen(ArrayList<AudioBean> queue) {
         AudioController.getInstance().setQueue(queue);
+        return this;
     }
 
     /**
@@ -191,6 +194,22 @@ public final class XAudio implements ITXAudio {
 
     }
 
+    /**
+     * 移除某个曲子
+     */
+    @Override
+    public void removeAudio(AudioBean audioBean) {
+        AudioController.getInstance().removeAudio(audioBean);
+    }
+
+    /**
+     * 移除所有曲子
+     */
+    @Override
+    public void clearAudio() {
+        AudioController.getInstance().clearAudio();
+    }
+
     public Context getContext() {
         return mContext;
     }
@@ -203,6 +222,7 @@ public final class XAudio implements ITXAudio {
         this.mService = mService;
         return this;
     }
+
 
 
     /**

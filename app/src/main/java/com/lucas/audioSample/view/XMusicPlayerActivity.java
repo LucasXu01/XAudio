@@ -17,6 +17,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.lucas.audioSample.R;
+import com.lucas.audioSample.custom.CustomMusicService;
+import com.lucas.audioSample.utils.MyUtils;
 import com.lucas.xaudio.XAudio;
 import com.lucas.xaudio.interfaces.AudioServiceListener;
 import com.lucas.xaudio.mediaplayer.core.AudioController;
@@ -45,31 +47,30 @@ public class XMusicPlayerActivity extends AppCompatActivity {
     private RelativeLayout mBgView;
     private TextView mInfoView;
     private TextView mAuthorView;
-
     private ImageView mFavouriteView;
-
     private SeekBar mProgressView;
     private TextView mStartTimeView;
     private TextView mTotalTimeView;
-
     private ImageView mPlayModeView;
     private ImageView mPlayView;
     private ImageView mNextView;
     private ImageView mPreViousView;
-
     private Animator animator;
-
     private boolean isChangeSeek = false; //判定是否在滑动seek
-
-
-    /**
-     * data
-     */
     private AudioBean mAudioBean; //当前正在播放歌曲
 
     public static void start(Activity context) {
+
+        //初始化音乐数据
+        XAudio.getInstance()
+                .setNotificationIntent(new Intent(context, XMusicPlayerActivity.class)) //可选
+                .setAutoService()  //可选：不调用setAutoService不会有服务，不带参为自带的服务，或者根据需要填写自己的Service参
+                .setAutoService(new CustomMusicService())
+                .setAudioQueen(MyUtils.getMockData());
+
         Intent intent = new Intent(context, XMusicPlayerActivity.class);
         ActivityCompat.startActivity(context, intent, ActivityOptionsCompat.makeSceneTransitionAnimation(context).toBundle());
+
     }
 
     @Override
@@ -96,6 +97,8 @@ public class XMusicPlayerActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_xmusic_player_layout);
+
+
 
         initData();
         initView();
