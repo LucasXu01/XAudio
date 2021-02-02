@@ -20,7 +20,7 @@ import com.lucas.audioSample.R;
 import com.lucas.audioSample.custom.CustomMusicService;
 import com.lucas.audioSample.utils.MyUtils;
 import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.interfaces.AudioServiceListener;
+import com.lucas.xaudio.extra.AudioServiceListener;
 import com.lucas.xaudio.mediaplayer.core.AudioController;
 import com.lucas.xaudio.mediaplayer.core.CustomMediaPlayer;
 import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;

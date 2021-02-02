@@ -6,7 +6,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 
 import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.interfaces.AudioServiceListener;
+import com.lucas.xaudio.extra.AudioServiceListener;
 import com.lucas.xaudio.mediaplayer.BroadcastReceiver.NotificationReceiver;
 import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;
 import com.lucas.xaudio.mediaplayer.events.AudioLoadEvent;

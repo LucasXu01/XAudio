@@ -40,6 +40,7 @@ public class AudioRecordConfig {
         this.audioFormat = audioFormat;
         this.outputFormat = outputFormat;
     }
+    public AudioRecordConfig() { }
 
 
     public enum OutputFormat {

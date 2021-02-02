@@ -47,15 +47,6 @@
             android:text="停止" />
 
         <Button
-            android:id="@+id/bt_play"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:text="播放" />
-
-        <Button
             android:id="@+id/bt_reset"
             android:layout_width="0dp"
             android:layout_height="50dp"
@@ -63,18 +54,6 @@
             android:text="重置" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/playText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_layout"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:textSize="16sp" />
-
-
-
 
 
 </RelativeLayout>

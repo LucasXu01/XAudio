@@ -32,6 +32,9 @@ dependencies {
 ## 效果显示
 <img src="./01.jpg" width="240px" height="426px"/>
 　
+| demo：音乐播放器   | 录音  | 其他功能（各功能可自选） |
+|:-----------:|:--------:|:---------:|
+|![](images/01.png) | ![](images/02.png) | ![](images/03.png)|
 
 ### 使用方法请参考demo
 

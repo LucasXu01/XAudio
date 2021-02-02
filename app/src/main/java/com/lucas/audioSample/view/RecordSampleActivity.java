@@ -1,28 +1,20 @@
 package com.lucas.audioSample.view;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lucas.audioSample.R;
 import com.lucas.audioSample.utils.MyUtils;
-import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.mediaplayer.model.AudioBean;
 import com.lucas.xaudio.recorder.mp3recorder.MP3Recorder;
-import com.lucas.xaudio.recorder.waveview.AudioPlayer;
 import com.lucas.xaudio.recorder.waveview.AudioWaveView;
 import com.lucas.xaudio.utils.FileUtils;
-import com.lucas.xaudio.utils.XMusicUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,18 +31,12 @@ public class RecordSampleActivity extends AppCompatActivity {
     private Button bt_record;
     private Button bt_record_pause;
     private Button bt_record_stop;
-    private Button bt_play;
     private Button bt_reset;
     private AudioWaveView audioWave;
-    private TextView playText;
 
     public String filePath;
     MP3Recorder mRecorder;
-    AudioPlayer audioPlayer;
     boolean mIsRecord = false;
-    boolean mIsPlay = false;
-    int duration;
-    int curPosition;
 
 
     @Override
@@ -62,10 +48,8 @@ public class RecordSampleActivity extends AppCompatActivity {
         bt_record = findViewById(R.id.bt_record);
         bt_record_pause = findViewById(R.id.bt_record_pause);
         bt_record_stop = findViewById(R.id.bt_record_stop);
-        bt_play = findViewById(R.id.bt_play);
         bt_reset = findViewById(R.id.bt_reset);
         audioWave = (AudioWaveView) findViewById(R.id.audioWave);
-        playText = (TextView)findViewById(R.id.playText);
 
 
         //录音
@@ -83,42 +67,12 @@ public class RecordSampleActivity extends AppCompatActivity {
             resolveStopRecord();
         });
 
-        //播放
-        bt_play.setOnClickListener(v->{
-            resolvePlayRecord();
-        });
-
         //重置
         bt_reset.setOnClickListener(v->{
             resolveResetPlay();
         });
 
         resolveNormalUI();
-
-        audioPlayer = new AudioPlayer(this, new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case AudioPlayer.HANDLER_CUR_TIME://更新的时间
-                        curPosition = (int) msg.obj;
-                        playText.setText(toTime(curPosition) + " / " + toTime(duration));
-                        break;
-                    case AudioPlayer.HANDLER_COMPLETE://播放结束
-                        playText.setText(" ");
-                        mIsPlay = false;
-                        break;
-                    case AudioPlayer.HANDLER_PREPARED://播放开始
-                        duration = (int) msg.obj;
-                        playText.setText(toTime(curPosition) + " / " + toTime(duration));
-                        break;
-                    case AudioPlayer.HANDLER_ERROR://播放错误
-                        resolveResetPlay();
-                        break;
-                }
-
-            }
-        });
 
     }
 
@@ -169,7 +123,7 @@ public class RecordSampleActivity extends AppCompatActivity {
             }
         });
 
-        //audioWave.setBaseRecorder(mRecorder);
+        audioWave.setBaseRecorder(mRecorder);
 
         try {
             mRecorder.start();
@@ -219,20 +173,6 @@ public class RecordSampleActivity extends AppCompatActivity {
     }
 
     /**
-     * 播放
-     */
-    private void resolvePlayRecord() {
-        if (TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
-            Toast.makeText(this, "文件不存在", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        playText.setText(" ");
-        mIsPlay = true;
-        audioPlayer.playUrl(filePath);
-        resolvePlayUI();
-    }
-
-    /**
      * 录音异常
      */
     private void resolveError() {
@@ -250,11 +190,6 @@ public class RecordSampleActivity extends AppCompatActivity {
      */
     private void resolveResetPlay() {
         filePath = "";
-        playText.setText("");
-        if (mIsPlay) {
-            mIsPlay = false;
-            audioPlayer.pause();
-        }
         resolveNormalUI();
     }
 
@@ -262,7 +197,6 @@ public class RecordSampleActivity extends AppCompatActivity {
         bt_record.setEnabled(false);
         bt_record_pause.setEnabled(true);
         bt_record_stop.setEnabled(true);
-        bt_play.setEnabled(false);
         bt_reset.setEnabled(false);
     }
 
@@ -270,7 +204,6 @@ public class RecordSampleActivity extends AppCompatActivity {
         bt_record.setEnabled(true);
         bt_record_pause.setEnabled(false);
         bt_record_stop.setEnabled(false);
-        bt_play.setEnabled(false);
         bt_reset.setEnabled(false);
     }
 
@@ -278,15 +211,6 @@ public class RecordSampleActivity extends AppCompatActivity {
         bt_record.setEnabled(true);
         bt_record_stop.setEnabled(false);
         bt_record_pause.setEnabled(false);
-        bt_play.setEnabled(true);
-        bt_reset.setEnabled(true);
-    }
-
-    private void resolvePlayUI() {
-        bt_record.setEnabled(false);
-        bt_record_stop.setEnabled(false);
-        bt_record_pause.setEnabled(false);
-        bt_play.setEnabled(true);
         bt_reset.setEnabled(true);
     }
 
@@ -294,7 +218,6 @@ public class RecordSampleActivity extends AppCompatActivity {
         bt_record.setEnabled(false);
         bt_record_pause.setEnabled(true);
         bt_record_stop.setEnabled(false);
-        bt_play.setEnabled(false);
         bt_reset.setEnabled(false);
     }
 

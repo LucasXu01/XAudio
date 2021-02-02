@@ -8,7 +8,7 @@ import android.os.Message;
 
 
 import com.lucas.xaudio.recorder.XLame;
-import com.lucas.xaudio.recorder.aac.AACEncode;
+import com.lucas.xaudio.utils.XMusicUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.microshow.rxffmpeg.RxFFmpegInvoke;
-
-public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRecordPositionUpdateListener {
+public class MP3DataEncodeThread extends HandlerThread implements AudioRecord.OnRecordPositionUpdateListener {
     private StopHandler mHandler;
     private static final int PROCESS_STOP = 1;
     private static final int PROCESS_ERROR = 2;
@@ -30,9 +28,9 @@ public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRec
 
     private static class StopHandler extends Handler {
 
-        private DataEncodeThread encodeThread;
+        private MP3DataEncodeThread encodeThread;
 
-        public StopHandler(Looper looper, DataEncodeThread encodeThread) {
+        public StopHandler(Looper looper, MP3DataEncodeThread encodeThread) {
             super(looper);
             this.encodeThread = encodeThread;
         }
@@ -53,7 +51,7 @@ public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRec
                 removeCallbacksAndMessages(null);
                 encodeThread.flushAndRelease();
                 getLooper().quit();
-                MP3Recorder.deleteFile(encodeThread.path);
+                XMusicUtils.deleteFile(encodeThread.path);
             }
         }
     }
@@ -65,7 +63,7 @@ public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRec
      * @param bufferSize bufferSize
      * @throws FileNotFoundException file not found
      */
-    public DataEncodeThread(File file, int bufferSize) throws FileNotFoundException {
+    public MP3DataEncodeThread(File file, int bufferSize) throws FileNotFoundException {
         super("DataEncodeThread");
         this.mFileOutputStream = new FileOutputStream(file);
         path = file.getAbsolutePath();

@@ -1,4 +1,4 @@
-package com.lucas.xaudio.interfaces;
+package com.lucas.xaudio.extra;
 
 import com.lucas.xaudio.mediaplayer.core.AudioController;
 import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;

@@ -40,9 +40,6 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
     }
 
     private RadioGroup mRGOutputFormat;
-    private RadioGroup mRGSamplingRate;
-    private RadioGroup mRGBitRate;
-    private RadioGroup mRGChannel;
     private Button mBtnStart;
     private Button mBtnPause;
     private Button mBtnStop;
@@ -69,9 +66,6 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
         mExecutor = Executors.newCachedThreadPool();
 
         mRGOutputFormat = findViewById(R.id.mr_rgOutputFormat);
-        mRGSamplingRate = findViewById(R.id.mr_rgSamplingRate);
-        mRGBitRate = findViewById(R.id.mr_rgBitrate);
-        mRGChannel = findViewById(R.id.mr_rgChannel);
         mBtnStart = findViewById(R.id.mr_btnStart);
         mBtnPause = findViewById(R.id.mr_btnPause);
         mBtnStop = findViewById(R.id.mr_btnStop);
@@ -81,9 +75,6 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
         mBtnStop.setOnClickListener(this);
 
         mRGOutputFormat.setOnCheckedChangeListener(this);
-        mRGBitRate.setOnCheckedChangeListener(this);
-        mRGSamplingRate.setOnCheckedChangeListener(this);
-        mRGChannel.setOnCheckedChangeListener(this);
 
     }
 
@@ -97,7 +88,7 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
                     outputFormat);
             mAudioRecord = new AudioRecord(mConfig, FileUtils.getAppPath(), "demo");
             mAudioRecord.prepare();
-            updateState(AudioRecorderActivityPState.PREPARE);
+            mState = AudioRecorderActivityPState.PREPARE;
         }
     }
 
@@ -112,7 +103,7 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
             Toast.makeText(this, "Please click the stop button.", Toast.LENGTH_LONG).show();
         }
         mAudioRecord.start();
-        updateState(AudioRecorderActivityPState.PLAYING);
+        mState = AudioRecorderActivityPState.PLAYING;
     }
 
     void pause() {
@@ -120,7 +111,7 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
             isPaused = true;
             mAudioRecord.pause();
             mBtnPause.setText("resume");
-            updateState(AudioRecorderActivityPState.PAUSED);
+            mState = AudioRecorderActivityPState.PAUSED;
             return;
         } else {
             Toast.makeText(this, "null", Toast.LENGTH_LONG).show();
@@ -132,21 +123,21 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
             isPaused = false;
             mAudioRecord.resume();
             mBtnPause.setText("pause");
-            updateState(AudioRecorderActivityPState.PLAYING);
+            mState = AudioRecorderActivityPState.PLAYING;
         }
     }
 
     void stop() {
         if (mState == AudioRecorderActivityPState.PLAYING || mState == AudioRecorderActivityPState.PAUSED) {
             mAudioRecord.stop();
-            updateState(AudioRecorderActivityPState.STOP);
+            mState = AudioRecorderActivityPState.STOP;
             release();
         }
         prepare();
     }
 
     void release() {
-        updateState(AudioRecorderActivityPState.RELEASE);
+        mState = AudioRecorderActivityPState.RELEASE;
     }
 
     @Override
@@ -171,13 +162,6 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
         }
     }
 
-    void updateState(AudioRecorderActivityPState pState) {
-        if (mState == pState) {
-            return;
-        } else {
-            mState = pState;
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -214,40 +198,7 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
                     outputFormat = AudioRecordConfig.OutputFormat.PCM;
                     Log.d(TAG, "onCheckedChanged: pcm");
                     break;
-                case R.id.mr_rbSamplingRate_800:
-                    sampleRate = AudioRecordConfig.SampleRate.SAMPPLERATE_800;
-                    Log.d(TAG, "onCheckedChanged: sampleRate 800");
-                    break;
-                case R.id.mr_rbSamplingRate_1600:
-                    sampleRate = AudioRecordConfig.SampleRate.SAMPPLERATE_1600;
-                    Log.d(TAG, "onCheckedChanged: sampleRate 1600");
-                    break;
-                case R.id.mr_rbSamplingRate_44100:
-                    sampleRate = AudioRecordConfig.SampleRate.SAMPPLERATE_44100;
-                    Log.d(TAG, "onCheckedChanged: sampleRate 44100");
-                    break;
-                case R.id.mr_rbSamplingRate_48000:
-                    sampleRate = AudioRecordConfig.SampleRate.SAMPPLERATE_48000;
-                    Log.d(TAG, "onCheckedChanged: sampleRate 48000");
-                    break;
-                case R.id.mr_rbBitrate_8:
-                    bitRate = AudioFormat.ENCODING_PCM_8BIT;
-                    Log.d(TAG, "onCheckedChanged: bitRate 8");
-                    break;
-                case R.id.mr_rbBitrate_16:
-                    bitRate = AudioFormat.ENCODING_PCM_16BIT;
-                    Log.d(TAG, "onCheckedChanged: bitRate 16");
-                    break;
-                case R.id.mr_rbChannel_1:
-                    channels = AudioFormat.CHANNEL_IN_MONO;
-                    Log.d(TAG, "onCheckedChanged: channel MONO");
-                    break;
-                case R.id.mr_rbChannel_2:
-                    channels = AudioFormat.CHANNEL_IN_STEREO;
-                    Log.d(TAG, "onCheckedChanged: channel STEREO");
-                    break;
             }
-//            prepare();
         }
 
 

@@ -8,14 +8,15 @@ import android.os.Process;
 
 import com.lucas.xaudio.recorder.BaseRecorder;
 import com.lucas.xaudio.recorder.XLame;
-//import com.lucas.xaudio.recorder.mp3recorder.util.LameUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MP3Recorder extends BaseRecorder {
-    private String TAG = MP3Recorder.class.getSimpleName();
+//import com.lucas.xaudio.recorder.mp3recorder.util.LameUtil;
+
+public class MP3Recorder2 extends BaseRecorder {
+    private String TAG = MP3Recorder2.class.getSimpleName();
     //=======================AudioRecord Default Settings=======================
     private static final int DEFAULT_AUDIO_SOURCE = MediaRecorder.AudioSource.MIC;   //录音来源为主麦克风
     /**
@@ -73,7 +74,7 @@ public class MP3Recorder extends BaseRecorder {
      *
      * @param recordFile target file
      */
-    public MP3Recorder(File recordFile) {
+    public MP3Recorder2(File recordFile) {
         mRecordFile = recordFile;
     }
 

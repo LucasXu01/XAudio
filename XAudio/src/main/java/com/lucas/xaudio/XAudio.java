@@ -7,8 +7,8 @@ import android.util.Log;
 
 import com.lucas.xaudio.mediaplayer.core.AudioController;
 import com.lucas.xaudio.mediaplayer.core.MusicService;
-import com.lucas.xaudio.interfaces.AudioServiceListener;
-import com.lucas.xaudio.interfaces.ITXAudio;
+import com.lucas.xaudio.extra.AudioServiceListener;
+import com.lucas.xaudio.extra.ITXAudio;
 import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;
 import com.lucas.xaudio.mediaplayer.events.AudioLoadEvent;
 import com.lucas.xaudio.mediaplayer.events.AudioPauseEvent;

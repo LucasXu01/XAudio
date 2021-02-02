@@ -1,18 +1,10 @@
 package com.lucas.audioSample.view;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import com.lucas.audioSample.R;
 import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.interfaces.AudioServiceListener;
-import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioLoadEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioPlayModeEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioProgressEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioReleaseEvent;
 import com.lucas.xaudio.mediaplayer.model.AudioBean;
 
 import androidx.appcompat.app.AppCompatActivity;
