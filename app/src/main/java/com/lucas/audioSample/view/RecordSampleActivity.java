@@ -112,17 +112,6 @@ public class RecordSampleActivity extends AppCompatActivity {
         audioWave.setWaveCount(2);     // 1单边  2双边
         audioWave.setDrawBase(false);  // 是否画出基线
 
-        mRecorder.setErrorHandler(new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (msg.what == MP3Recorder.ERROR_TYPE) {
-                    Toast.makeText(RecordSampleActivity.this, "没有麦克风权限", Toast.LENGTH_SHORT).show();
-                    resolveError();
-                }
-            }
-        });
-
         audioWave.setBaseRecorder(mRecorder);
 
         try {
@@ -219,12 +208,6 @@ public class RecordSampleActivity extends AppCompatActivity {
         bt_record_pause.setEnabled(true);
         bt_record_stop.setEnabled(false);
         bt_reset.setEnabled(false);
-    }
-
-    private String toTime(long time) {
-        SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
-        String dateString = formatter.format(time);
-        return dateString;
     }
 
 

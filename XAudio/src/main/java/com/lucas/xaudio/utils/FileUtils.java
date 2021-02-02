@@ -13,7 +13,7 @@ public class FileUtils {
     private static final String SD_PATH = Environment.getExternalStorageDirectory().getPath();
     private static final String DATA_PATH = Environment.getDataDirectory().getPath();
     private static final String SD_STATE = Environment.getExternalStorageState();
-    public static final String NAME = "audioWave";
+    public static final String NAME = "audioX";
 
     public static String getAppPath() {
         StringBuilder sb = new StringBuilder();

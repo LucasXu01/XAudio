@@ -1,4 +1,4 @@
-package com.lucas.xaudio.recorder;
+package com.lucas.xaudio.base;
 
 /**
  * Created by shuyu on 2016/11/16.

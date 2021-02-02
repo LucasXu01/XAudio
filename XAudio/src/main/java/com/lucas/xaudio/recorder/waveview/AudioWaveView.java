@@ -15,7 +15,7 @@ import android.view.ViewTreeObserver;
 
 
 import com.lucas.xaudio.R;
-import com.lucas.xaudio.recorder.BaseRecorder;
+import com.lucas.xaudio.base.BaseRecorder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

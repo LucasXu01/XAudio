@@ -5,10 +5,11 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Process;
+import android.util.Log;
 
-import com.lucas.xaudio.recorder.BaseRecorder;
+import com.lucas.xaudio.base.BaseRecorder;
 import com.lucas.xaudio.recorder.XLame;
-//import com.lucas.xaudio.recorder.mp3recorder.util.LameUtil;
+import com.lucas.xaudio.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,15 +47,11 @@ public class MP3Recorder extends BaseRecorder {
      * 自定义 每160帧作为一个周期，通知一下需要进行编码
      */
     private static final int FRAME_COUNT = 160;
-    public static final int ERROR_TYPE = 22;
-
 
     private AudioRecord mAudioRecord = null;
     private MP3DataEncodeThread mEncodeThread;
     private File mRecordFile;
     private ArrayList<Short> dataList;
-    private Handler errorHandler;
-
 
     private short[] mPCMBuffer;
     private boolean mIsRecording = false;
@@ -141,9 +138,9 @@ public class MP3Recorder extends BaseRecorder {
                     int readSize = mAudioRecord.read(mPCMBuffer, 0, mBufferSize);
 
                     if (readSize == AudioRecord.ERROR_INVALID_OPERATION || readSize == AudioRecord.ERROR_BAD_VALUE) {
-                        if (errorHandler != null && !mSendError) {
+                        if (!mSendError) {
                             mSendError = true;
-                            errorHandler.sendEmptyMessage(ERROR_TYPE);
+                            Log.e(TAG, "run: 请检查是否有麦克风权限");
                             mIsRecording = false;
                             isError = true;
                         }
@@ -156,9 +153,8 @@ public class MP3Recorder extends BaseRecorder {
                             calculateRealVolume(mPCMBuffer, readSize);
                             sendData(mPCMBuffer, readSize);
                         } else {
-                            if (errorHandler != null && !mSendError) {
+                            if (!mSendError) {
                                 mSendError = true;
-                                errorHandler.sendEmptyMessage(ERROR_TYPE);
                                 mIsRecording = false;
                                 isError = true;
                             }
@@ -271,15 +267,6 @@ public class MP3Recorder extends BaseRecorder {
      */
     public void setPause(boolean pause) {
         this.mPause = pause;
-    }
-
-    /**
-     * 设置错误回调
-     *
-     * @param errorHandler 错误通知
-     */
-    public void setErrorHandler(Handler errorHandler) {
-        this.errorHandler = errorHandler;
     }
 
     public int getWaveSpeed() {
