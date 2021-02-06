@@ -16,7 +16,7 @@ import com.lucas.xaudio.mediaplayer.events.AudioPlayModeEvent;
 import com.lucas.xaudio.mediaplayer.events.AudioProgressEvent;
 import com.lucas.xaudio.mediaplayer.events.AudioStartEvent;
 import com.lucas.xaudio.mediaplayer.model.AudioBean;
-import com.lucas.xaudio.utils.XMusicUtils;
+import com.lucas.xaudio.utils.XAudioUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -118,7 +118,7 @@ public final class XAudio implements ITXAudio {
      */
     public void playAudio() {
         AudioController.getInstance().play();
-        if (mService != null && !XMusicUtils.isServiceRunning(mContext, mService.getClass().getName())) {
+        if (mService != null && !XAudioUtils.isServiceRunning(mContext, mService.getClass().getName())) {
             Intent intent = new Intent(XAudio.getInstance().getContext(), mService.getClass());
             XAudio.getInstance().getContext().startService(intent);
         }
@@ -143,7 +143,7 @@ public final class XAudio implements ITXAudio {
      */
     public void playOrPauseAudio() {
         AudioController.getInstance().playOrPause();
-        if (mService != null && !XMusicUtils.isServiceRunning(mContext, mService.getClass().getName())) {
+        if (mService != null && !XAudioUtils.isServiceRunning(mContext, mService.getClass().getName())) {
             Intent intent = new Intent(XAudio.getInstance().getContext(), mService.getClass());
             XAudio.getInstance().getContext().startService(intent);
         }
@@ -295,5 +295,11 @@ public final class XAudio implements ITXAudio {
     /**
      * ******************** 以上 **********************
      */
+
+
+    /**
+     * ******************** 录音相关 **********************
+     */
+
 
 }

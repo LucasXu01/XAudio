@@ -8,7 +8,7 @@ import android.os.Message;
 
 
 import com.lucas.xaudio.recorder.XLame;
-import com.lucas.xaudio.utils.XMusicUtils;
+import com.lucas.xaudio.utils.XAudioUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,7 +51,7 @@ public class MP3DataEncodeThread extends HandlerThread implements AudioRecord.On
                 removeCallbacksAndMessages(null);
                 encodeThread.flushAndRelease();
                 getLooper().quit();
-                XMusicUtils.deleteFile(encodeThread.path);
+                XAudioUtils.deleteFile(encodeThread.path);
             }
         }
     }

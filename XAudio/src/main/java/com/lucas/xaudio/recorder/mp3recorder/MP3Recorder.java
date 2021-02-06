@@ -3,17 +3,23 @@ package com.lucas.xaudio.recorder.mp3recorder;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.os.Handler;
 import android.os.Process;
 import android.util.Log;
 
 import com.lucas.xaudio.base.BaseRecorder;
+import com.lucas.xaudio.recorder.AudioRecordConfig;
 import com.lucas.xaudio.recorder.XLame;
-import com.lucas.xaudio.utils.FileUtils;
+import com.lucas.xaudio.recorder.aac.AACEncode;
+import com.lucas.xaudio.recorder.wav.WAVEncode;
+import com.lucas.xaudio.utils.XAudioUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MP3Recorder extends BaseRecorder {
     private String TAG = MP3Recorder.class.getSimpleName();
@@ -50,10 +56,10 @@ public class MP3Recorder extends BaseRecorder {
 
     private AudioRecord mAudioRecord = null;
     private MP3DataEncodeThread mEncodeThread;
-    private File mRecordFile;
     private ArrayList<Short> dataList;
 
     private short[] mPCMBuffer;
+    private byte[] mPCMBufferByte;
     private boolean mIsRecording = false;
     private boolean mSendError;
     private boolean mPause;
@@ -63,56 +69,113 @@ public class MP3Recorder extends BaseRecorder {
     private int mMaxSize;
     //波形速度
     private int mWaveSpeed = 300;
+    private AudioRecordConfig mRecordConfig;
+    private String fileStr;
+    private File mRecordFile;
+    private FileOutputStream mFileOutputStream;
+    private AACEncode mAacEncode;
+    private ExecutorService mExecutor;
+    private WAVEncode mWavEncode;
+    private RandomAccessFile mRandomAccessFile;
 
     /**
      * Default constructor. Setup recorder with default sampling rate 1 channel,
      * 16 bits pcm
      *
-     * @param recordFile target file
+     * @param recordConfig 录音参数 See {@link AudioRecordConfig}
+     * @param filePath     录音的文件路径
+     * @param fileName     录音的文件名称
      */
-    public MP3Recorder(File recordFile) {
-        mRecordFile = recordFile;
+    public MP3Recorder(AudioRecordConfig recordConfig, String filePath, String fileName) {
+        mExecutor = Executors.newCachedThreadPool();
+        this.mRecordConfig = recordConfig;
+        File file = new File(filePath);
+        if (!file.exists()) {
+            if (!file.mkdirs()) {
+                Log.e(TAG, "AudioRecord: 创建录音文件失败");
+                return;
+            }
+        }
+        this.fileStr = filePath + fileName + recordConfig.outputFormat.getName();
+    }
+
+    public MP3Recorder(String filePath, String fileName) {
+        this(new AudioRecordConfig(
+                MediaRecorder.AudioSource.MIC,
+                AudioRecordConfig.SampleRate.SAMPPLERATE_44100,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                AudioRecordConfig.OutputFormat.MP3), filePath, fileName);
     }
 
     /**
      * Initialize audio recorder
      */
     private void initAudioRecorder() throws IOException {
-        mBufferSize = AudioRecord.getMinBufferSize(DEFAULT_SAMPLING_RATE, DEFAULT_CHANNEL_CONFIG, DEFAULT_AUDIO_FORMAT.getAudioFormat());
-
-        int bytesPerFrame = DEFAULT_AUDIO_FORMAT.getBytesPerFrame();
-        /* Get number of samples. Calculate the buffer size
-         * (round up to the factor of given frame size)
-         * 使能被整除，方便下面的周期性通知
-         * */
-        int frameSize = mBufferSize / bytesPerFrame;
-        if (frameSize % FRAME_COUNT != 0) {
-            frameSize += (FRAME_COUNT - frameSize % FRAME_COUNT);
-            mBufferSize = frameSize * bytesPerFrame;
+        mRecordFile = new File(fileStr);
+        if (mRecordConfig == null) {
+            Log.e(TAG, "initAudioRecorder: mRecordConfig为空！");
+            return;
+        }
+        mBufferSize = AudioRecord.getMinBufferSize(mRecordConfig.sampleRate, mRecordConfig.channelConfig, mRecordConfig.audioFormat);
+        switch (mRecordConfig.outputFormat) {
+            case MP3:
+                int bytesPerFrame = DEFAULT_AUDIO_FORMAT.getBytesPerFrame();
+                /* Get number of samples. Calculate the buffer size
+                 * (round up to the factor of given frame size)
+                 * 使能被整除，方便下面的周期性通知
+                 * */
+                int frameSize = mBufferSize / bytesPerFrame;
+                if (frameSize % FRAME_COUNT != 0) {
+                    frameSize += (FRAME_COUNT - frameSize % FRAME_COUNT);
+                    mBufferSize = frameSize * bytesPerFrame;
+                }
+                /* Setup audio recorder */
+                mAudioRecord = new AudioRecord(DEFAULT_AUDIO_SOURCE, DEFAULT_SAMPLING_RATE, DEFAULT_CHANNEL_CONFIG, DEFAULT_AUDIO_FORMAT.getAudioFormat(), mBufferSize);
+                mPCMBuffer = new short[mBufferSize];
+                /*
+                 * Initialize lame buffer
+                 * mp3 sampling rate is the same as the recorded pcm sampling rate
+                 * The bit rate is 32kbps
+                 *
+                 */
+                XLame.init(DEFAULT_SAMPLING_RATE, DEFAULT_LAME_IN_CHANNEL, DEFAULT_SAMPLING_RATE, DEFAULT_LAME_MP3_BIT_RATE, DEFAULT_LAME_MP3_QUALITY);
+                // Create and run thread used to encode data
+                // The thread will
+                mEncodeThread = new MP3DataEncodeThread(mRecordFile, mBufferSize);
+                mEncodeThread.start();
+                mAudioRecord.setRecordPositionUpdateListener(mEncodeThread, mEncodeThread.getHandler());
+                mAudioRecord.setPositionNotificationPeriod(FRAME_COUNT);
+                break;
+            case AAC:
+                // 录音最小缓存大小
+                mAudioRecord = new AudioRecord(mRecordConfig.audioSource, mRecordConfig.sampleRate, mRecordConfig.channelConfig, mRecordConfig.audioFormat, mBufferSize);
+                mPCMBuffer = new short[mBufferSize];
+                mFileOutputStream = new FileOutputStream(new File(fileStr));
+                mAacEncode = new AACEncode();
+                mAacEncode.prepare();
+                break;
+            case WAV:
+                mAudioRecord = new AudioRecord(mRecordConfig.audioSource, mRecordConfig.sampleRate, mRecordConfig.channelConfig, mRecordConfig.audioFormat, mBufferSize);
+                mPCMBuffer = new short[mBufferSize];
+                mWavEncode = new WAVEncode();
+                mRandomAccessFile = new RandomAccessFile(new File(fileStr), "rw");
+                // 留出文件头的位置
+                mRandomAccessFile.seek(44);
+                break;
+            case PCM:
+                // 录音最小缓存大小
+                mAudioRecord = new AudioRecord(mRecordConfig.audioSource, mRecordConfig.sampleRate, mRecordConfig.channelConfig, mRecordConfig.audioFormat, mBufferSize);
+                mPCMBuffer = new short[mBufferSize];
+                mFileOutputStream = new FileOutputStream(new File(fileStr));
+                break;
         }
 
-        /* Setup audio recorder */
-        mAudioRecord = new AudioRecord(DEFAULT_AUDIO_SOURCE, DEFAULT_SAMPLING_RATE, DEFAULT_CHANNEL_CONFIG, DEFAULT_AUDIO_FORMAT.getAudioFormat(), mBufferSize);
 
-        mPCMBuffer = new short[mBufferSize];
-        /*
-         * Initialize lame buffer
-         * mp3 sampling rate is the same as the recorded pcm sampling rate
-         * The bit rate is 32kbps
-         *
-         */
-        XLame.init(DEFAULT_SAMPLING_RATE, DEFAULT_LAME_IN_CHANNEL, DEFAULT_SAMPLING_RATE, DEFAULT_LAME_MP3_BIT_RATE, DEFAULT_LAME_MP3_QUALITY);
-        // Create and run thread used to encode data
-        // The thread will
-        mEncodeThread = new MP3DataEncodeThread(mRecordFile, mBufferSize);
-        mEncodeThread.start();
-        mAudioRecord.setRecordPositionUpdateListener(mEncodeThread, mEncodeThread.getHandler());
-        mAudioRecord.setPositionNotificationPeriod(FRAME_COUNT);
     }
 
     /**
-     * Start recording. Create an encoding thread. Start record from this
-     * thread.
+     * Start recording. Create an encoding thread. Start record from this thread.
      *
      * @throws IOException initAudioRecorder throws
      */
@@ -127,15 +190,17 @@ public class MP3Recorder extends BaseRecorder {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        new Thread() {
-            boolean isError = false;
 
-            @Override
-            public void run() {
-                //设置线程权限
-                Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO); //声音线程的最高级别，优先程度较THREAD_PRIORITY_AUDIO要高。
+        mExecutor.execute(()->{
+            boolean isError = false;
+            Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
+            try {
                 while (mIsRecording) {
-                    int readSize = mAudioRecord.read(mPCMBuffer, 0, mBufferSize);
+                    byte[] readBufferByte = new byte[mBufferSize];
+                    int readSize = mAudioRecord.read(readBufferByte, 0, mBufferSize);
+
+
+//                    int readSize = mAudioRecord.read(mPCMBuffer, 0, mBufferSize);
 
                     if (readSize == AudioRecord.ERROR_INVALID_OPERATION || readSize == AudioRecord.ERROR_BAD_VALUE) {
                         if (!mSendError) {
@@ -149,7 +214,27 @@ public class MP3Recorder extends BaseRecorder {
                             if (mPause) {
                                 continue;
                             }
-                            mEncodeThread.addTask(mPCMBuffer, readSize);
+
+                            switch (mRecordConfig.outputFormat){
+                                case MP3:
+                                    mEncodeThread.addTask(mPCMBuffer, readSize);
+                                    break;
+                                case AAC:
+                                    if (mAacEncode != null && mFileOutputStream != null) {
+                                        mAacEncode.encode(readSize, XAudioUtils.shortToBytes(mPCMBuffer), mFileOutputStream);
+                                    }
+                                    break;
+                                case WAV:
+                                    if (mRandomAccessFile != null) {
+                                        mRandomAccessFile.write(readBufferByte, 0, mBufferSize);
+                                    }
+                                    break;
+                                case PCM:
+                                    if (mFileOutputStream != null) {
+                                        mFileOutputStream.write(readBufferByte, 0, mBufferSize);
+                                    }
+                                    break;
+                            }
                             calculateRealVolume(mPCMBuffer, readSize);
                             sendData(mPCMBuffer, readSize);
                         } else {
@@ -161,24 +246,58 @@ public class MP3Recorder extends BaseRecorder {
                         }
                     }
                 }
-                try {
-                    // release and finalize audioRecord
-                    mAudioRecord.stop();
-                    mAudioRecord.release();
-                    mAudioRecord = null;
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                // release and finalize audioRecord
+                mAudioRecord.stop();
+                mAudioRecord.release();
+                mAudioRecord = null;
                 // stop the encoding thread and try to wait
                 // until the thread finishes its job
-                if (isError) {
-                    mEncodeThread.sendErrorMessage();
-                } else {
-                    mEncodeThread.sendStopMessage();
+                if(mRecordConfig.outputFormat == AudioRecordConfig.OutputFormat.MP3){
+                    if (isError) {
+                        mEncodeThread.sendErrorMessage();
+                    } else {
+                        mEncodeThread.sendStopMessage();
+                    }
                 }
-            }
 
-        }.start();
+                switch (mRecordConfig.outputFormat) {
+                    case WAV:
+                        int sampleRate = mRecordConfig.sampleRate;
+                        int channel = mRecordConfig.channelConfig;
+                        if (mRecordConfig.channelConfig == AudioFormat.CHANNEL_IN_STEREO) {
+                            channel = 2;
+                        } else if (mRecordConfig.channelConfig == AudioFormat.CHANNEL_IN_MONO) {
+                            channel = 1;
+                        }
+                        int bitRate = mRecordConfig.audioFormat;
+                        if (mRecordConfig.audioFormat == AudioFormat.ENCODING_PCM_8BIT) {
+                            bitRate = 8;
+                        } else if (mRecordConfig.audioFormat == AudioFormat.ENCODING_PCM_16BIT) {
+                            bitRate = 16;
+                        }
+
+                        long byteRate = sampleRate * bitRate * channel / 8;
+                        mWavEncode.WriteWaveFileHeader(mRandomAccessFile,
+                                mRandomAccessFile.length(),
+                                mRecordConfig.sampleRate,
+                                channel,
+                                byteRate);
+                        break;
+                }
+
+                if (mFileOutputStream != null) {
+                    mFileOutputStream.close();
+                }
+                if (mRandomAccessFile != null) {
+                    mRandomAccessFile.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+
+
     }
 
     /**

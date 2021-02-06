@@ -31,7 +31,7 @@ import com.lucas.xaudio.mediaplayer.events.AudioReleaseEvent;
 import com.lucas.xaudio.mediaplayer.image_loader.ImageLoaderManager;
 import com.lucas.xaudio.mediaplayer.model.AudioBean;
 import com.lucas.xaudio.mediaplayer.view.MusicListDialog;
-import com.lucas.xaudio.utils.XMusicUtils;
+import com.lucas.xaudio.utils.XAudioUtils;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -121,8 +121,8 @@ public class XMusicPlayerActivity extends AppCompatActivity {
                 int totalTime = event.maxLength;
                 int currentTime = event.progress;
                 //更新时间
-                mStartTimeView.setText(XMusicUtils.formatTime(currentTime));
-                mTotalTimeView.setText(XMusicUtils.formatTime(totalTime));
+                mStartTimeView.setText(XAudioUtils.formatTime(currentTime));
+                mTotalTimeView.setText(XAudioUtils.formatTime(totalTime));
                 if (!isChangeSeek) {
                     mProgressView.setProgress(currentTime);
                     mProgressView.setMax(totalTime);

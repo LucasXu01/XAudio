@@ -63,9 +63,12 @@ dependencies {
 
 
     implementation "com.github.bumptech.glide:glide:4.9.0"
+    implementation 'com.blankj:utilcodex:1.30.5'
 
     implementation project(path: ':XAudio')
 
 //    implementation "com.lucas.xaudio:xaudio:0.0.1"
+
+
 
 }

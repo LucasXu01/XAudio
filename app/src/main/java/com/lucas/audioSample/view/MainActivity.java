@@ -3,19 +3,13 @@ package com.lucas.audioSample.view;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.lucas.audioSample.R;
-import com.lucas.audioSample.utils.MyUtils;
-import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.mediaplayer.model.AudioBean;
-import com.lucas.audioSample.custom.CustomMusicService;
 import com.permissionx.guolindev.PermissionX;
 import com.permissionx.guolindev.callback.RequestCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         //简单的音乐播放器
         bt_music_play.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, RecordSampleActivity.class));
+            startActivity(new Intent(MainActivity.this, Mp3RecordSampleActivity.class));
         });
 
         //简单的音乐播放器

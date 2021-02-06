@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.List;
 
-public class XMusicUtils {
+public class XAudioUtils {
 
   /**
    * 毫秒转分秒

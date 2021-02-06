@@ -2,8 +2,12 @@ package com.lucas.xaudio.recorder;
 
 import android.media.AudioFormat;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.lucas.xaudio.recorder.aac.AACEncode;
 import com.lucas.xaudio.recorder.wav.WAVEncode;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -31,21 +35,26 @@ public class AudioRecord {
     private WAVEncode mWavEncode;
     private boolean isPlaying = false;  // 边录边播 开关
     private AudioRecordConfig mRecordConfig;
-    private String strFilePath;
-    private String strFileName;
     private int bufferSizeInBytes;  // 录音缓存区大小
     private android.media.AudioRecord mAudioRecord;
+    private String fileStr;
 
     /**
      * @param recordConfig 录音参数 See {@link AudioRecordConfig}
-     * @param filePath     录音的文件地址
-     * @param fileName     录音的文件名
+     * @param filePath     录音的文件路径
+     * @param fileName     录音的文件名称
      */
     public AudioRecord(AudioRecordConfig recordConfig, String filePath, String fileName) {
         mExecutor = Executors.newCachedThreadPool();
         this.mRecordConfig = recordConfig;
-        this.strFilePath = filePath;
-        this.strFileName = fileName;
+        File file = new File(filePath);
+        if (!file.exists()) {
+            if (!file.mkdirs()) {
+                Log.e(TAG, "AudioRecord: 创建录音文件失败");
+                return;
+            }
+        }
+        this.fileStr = filePath + fileName + recordConfig.outputFormat.getName();
     }
 
     public void prepare() {
@@ -135,18 +144,18 @@ public class AudioRecord {
     void initEncode() throws IOException {
         switch (mRecordConfig.outputFormat) {
             case AAC:
-                mFileOutputStream = new FileOutputStream(strFilePath + strFileName + mRecordConfig.outputFormat.getName());
+                mFileOutputStream = new FileOutputStream(new File(fileStr));
                 mAacEncode = new AACEncode();
                 mAacEncode.prepare();
                 break;
             case WAV:
                 mWavEncode = new WAVEncode();
-                mRandomAccessFile = new RandomAccessFile(strFilePath + strFileName + mRecordConfig.outputFormat.getName(), "rw");
+                mRandomAccessFile = new RandomAccessFile(new File(fileStr), "rw");
                 // 留出文件头的位置
                 mRandomAccessFile.seek(44);
                 break;
             case PCM:
-                mFileOutputStream = new FileOutputStream(strFilePath + strFileName + mRecordConfig.outputFormat.getName());
+                mFileOutputStream = new FileOutputStream(new File(fileStr));
                 break;
         }
     }

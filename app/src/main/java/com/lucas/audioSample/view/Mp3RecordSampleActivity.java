@@ -2,6 +2,8 @@ package com.lucas.audioSample.view;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioFormat;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,11 +12,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.PathUtils;
 import com.lucas.audioSample.R;
 import com.lucas.audioSample.utils.MyUtils;
+import com.lucas.xaudio.recorder.AudioRecord;
+import com.lucas.xaudio.recorder.AudioRecordConfig;
 import com.lucas.xaudio.recorder.mp3recorder.MP3Recorder;
 import com.lucas.xaudio.recorder.waveview.AudioWaveView;
-import com.lucas.xaudio.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import static com.lucas.audioSample.utils.MyUtils.getScreenWidth;
 
-public class RecordSampleActivity extends AppCompatActivity {
+public class Mp3RecordSampleActivity extends AppCompatActivity {
 
 
     private Button bt_record;
@@ -80,18 +86,16 @@ public class RecordSampleActivity extends AppCompatActivity {
      * 开始录音
      */
     private void resolveRecord() {
-        filePath = FileUtils.getAppPath();
-        File file = new File(filePath);
-        if (!file.exists()) {
-            if (!file.mkdirs()) {
-                Toast.makeText(this, "创建文件失败", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
+
 
         int offset = MyUtils.dip2px(this, 7);
-        filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
-        mRecorder = new MP3Recorder(new File(filePath));
+        AudioRecordConfig mConfig = new AudioRecordConfig(
+                MediaRecorder.AudioSource.MIC,
+                AudioRecordConfig.SampleRate.SAMPPLERATE_44100,
+                AudioFormat.CHANNEL_IN_STEREO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                AudioRecordConfig.OutputFormat.PCM);
+        mRecorder = new MP3Recorder(mConfig, PathUtils.getExternalStoragePath() + "/XAudio/", UUID.randomUUID().toString());
         int size = getScreenWidth(this) / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
 
@@ -111,8 +115,7 @@ public class RecordSampleActivity extends AppCompatActivity {
         audioWave.setOffset(offset);   // 设置线与线之间的偏移
         audioWave.setWaveCount(2);     // 1单边  2双边
         audioWave.setDrawBase(false);  // 是否画出基线
-
-        audioWave.setBaseRecorder(mRecorder);
+//        audioWave.setBaseRecorder(mRecorder); //设置好偶波形会变色
 
         try {
             mRecorder.start();
@@ -166,7 +169,7 @@ public class RecordSampleActivity extends AppCompatActivity {
      */
     private void resolveError() {
         resolveNormalUI();
-        FileUtils.deleteFile(filePath);
+        FileUtils.delete(filePath);
         filePath = "";
         if (mRecorder != null && mRecorder.isRecording()) {
             mRecorder.stop();

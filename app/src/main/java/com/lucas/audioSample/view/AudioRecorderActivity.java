@@ -18,11 +18,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.PathUtils;
 import com.lucas.audioSample.R;
 import com.lucas.xaudio.recorder.AudioRecord;
 import com.lucas.xaudio.recorder.AudioRecordConfig;
-import com.lucas.xaudio.utils.FileUtils;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -49,12 +51,6 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
     private String path;
     private boolean isPaused = false;  //是否暂停
     private AudioRecorderActivityPState mState = AudioRecorderActivityPState.RELEASE;
-    private AudioRecordConfig.OutputFormat outputFormat = AudioRecordConfig.OutputFormat.AAC;
-    //    private AudioRecordConfig.OutputFormat outputFormat = AudioRecordConfig.OutputFormat.PCM;
-//    private AudioRecordConfig.OutputFormat outputFormat = AudioRecordConfig.OutputFormat.WAV;
-    private int sampleRate = AudioRecordConfig.SampleRate.SAMPPLERATE_44100;
-    private int bitRate = AudioFormat.ENCODING_PCM_16BIT;
-    private int channels = AudioFormat.CHANNEL_IN_STEREO;
     private boolean isPlaying = false;
     private ExecutorService mExecutor;
 
@@ -82,11 +78,11 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
         if (mState == AudioRecorderActivityPState.RELEASE) {
             mConfig = new AudioRecordConfig(
                     MediaRecorder.AudioSource.MIC,
-                    sampleRate,
-                    channels,
-                    bitRate,
-                    outputFormat);
-            mAudioRecord = new AudioRecord(mConfig, FileUtils.getAppPath(), "demo");
+                    AudioRecordConfig.SampleRate.SAMPPLERATE_44100,
+                    AudioFormat.CHANNEL_IN_STEREO,
+                    AudioFormat.ENCODING_PCM_16BIT,
+                    AudioRecordConfig.OutputFormat.WAV);
+            mAudioRecord = new AudioRecord(mConfig, PathUtils.getExternalStoragePath() + "/XAudio/", UUID.randomUUID().toString());
             mAudioRecord.prepare();
             mState = AudioRecorderActivityPState.PREPARE;
         }
@@ -183,21 +179,10 @@ public class AudioRecorderActivity extends Activity implements View.OnClickListe
         } else {
             switch (id) {
                 case R.id.mr_rbOutputFormat_mp3:
-                    outputFormat = AudioRecordConfig.OutputFormat.MP3;
+//                    outputFormat = AudioRecordConfig.OutputFormat.MP3;
                     Log.d(TAG, "onCheckedChanged: mp3");
                     break;
-                case R.id.mr_rbOutputFormat_aac:
-                    outputFormat = AudioRecordConfig.OutputFormat.AAC;
-                    Log.d(TAG, "onCheckedChanged: aac");
-                    break;
-                case R.id.mr_rbOutputFormat_wav:
-                    outputFormat = AudioRecordConfig.OutputFormat.WAV;
-                    Log.d(TAG, "onCheckedChanged: wav");
-                    break;
-                case R.id.mr_rbOutputFormat_pcm:
-                    outputFormat = AudioRecordConfig.OutputFormat.PCM;
-                    Log.d(TAG, "onCheckedChanged: pcm");
-                    break;
+
             }
         }
 
