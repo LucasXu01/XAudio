@@ -191,76 +191,150 @@ public class MP3Recorder extends BaseRecorder {
             ex.printStackTrace();
         }
 
-        mExecutor.execute(()->{
+        mExecutor.execute(() -> {
             boolean isError = false;
             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
             try {
                 while (mIsRecording) {
                     byte[] readBufferByte = new byte[mBufferSize];
-                    int readSize = mAudioRecord.read(readBufferByte, 0, mBufferSize);
+                    short[] readBufferShort = new short[mBufferSize];
 
-
+//                    int readSize = mAudioRecord.read(readBufferByte, 0, mBufferSize);
 //                    int readSize = mAudioRecord.read(mPCMBuffer, 0, mBufferSize);
 
-                    if (readSize == AudioRecord.ERROR_INVALID_OPERATION || readSize == AudioRecord.ERROR_BAD_VALUE) {
-                        if (!mSendError) {
-                            mSendError = true;
-                            Log.e(TAG, "run: 请检查是否有麦克风权限");
-                            mIsRecording = false;
-                            isError = true;
-                        }
-                    } else {
-                        if (readSize > 0) {
-                            if (mPause) {
-                                continue;
+                    switch (mRecordConfig.outputFormat) {
+                        case MP3:
+                            int readSize = mAudioRecord.read(readBufferShort, 0, mBufferSize);
+                            if (readSize == AudioRecord.ERROR_INVALID_OPERATION || readSize == AudioRecord.ERROR_BAD_VALUE) {
+                                if (!mSendError) {
+                                    mSendError = true;
+                                    Log.e(TAG, "run: 请检查是否有麦克风权限");
+                                    mIsRecording = false;
+                                    isError = true;
+                                }
+                            } else {
+                                if (readSize > 0) {
+                                    if (mPause) {
+                                        continue;
+                                    }
+                                    mEncodeThread.addTask(readBufferShort, readSize);
+                                    calculateRealVolume(readBufferShort, readSize);
+                                    sendData(readBufferShort, readSize);
+                                } else {
+                                    if (!mSendError) {
+                                        mSendError = true;
+                                        mIsRecording = false;
+                                        isError = true;
+                                    }
+                                }
                             }
+                            break;
+                        case AAC:
+                            int readSize2 = mAudioRecord.read(readBufferShort, 0, mBufferSize);
+                            if (readSize2 == AudioRecord.ERROR_INVALID_OPERATION || readSize2 == AudioRecord.ERROR_BAD_VALUE) {
+                                if (!mSendError) {
+                                    mSendError = true;
+                                    Log.e(TAG, "run: 请检查是否有麦克风权限");
+                                    mIsRecording = false;
+                                    isError = true;
+                                }
+                            } else {
+                                if (readSize2 > 0) {
+                                    if (mPause) {
+                                        continue;
+                                    }
 
-                            switch (mRecordConfig.outputFormat){
-                                case MP3:
-                                    mEncodeThread.addTask(mPCMBuffer, readSize);
-                                    break;
-                                case AAC:
                                     if (mAacEncode != null && mFileOutputStream != null) {
-                                        mAacEncode.encode(readSize, XAudioUtils.shortToBytes(mPCMBuffer), mFileOutputStream);
+                                        mAacEncode.encode(readSize2, XAudioUtils.shortToBytes(mPCMBuffer), mFileOutputStream);
                                     }
-                                    break;
-                                case WAV:
-                                    if (mRandomAccessFile != null) {
-                                        mRandomAccessFile.write(readBufferByte, 0, mBufferSize);
+                                    calculateRealVolume(mPCMBuffer, readSize2);
+                                    sendData(mPCMBuffer, readSize2);
+                                } else {
+                                    if (!mSendError) {
+                                        mSendError = true;
+                                        mIsRecording = false;
+                                        isError = true;
                                     }
-                                    break;
-                                case PCM:
+                                }
+                            }
+                            break;
+                        case WAV:
+                            int readSize3 = mAudioRecord.read(readBufferByte, 0, mBufferSize);
+                            if (readSize3 == AudioRecord.ERROR_INVALID_OPERATION || readSize3 == AudioRecord.ERROR_BAD_VALUE) {
+                                if (!mSendError) {
+                                    mSendError = true;
+                                    Log.e(TAG, "run: 请检查是否有麦克风权限");
+                                    mIsRecording = false;
+                                    isError = true;
+                                }
+                            } else {
+                                if (readSize3 > 0) {
+                                    if (mPause) {
+                                        continue;
+                                    }
+
+                                    if (mAacEncode != null && mFileOutputStream != null) {
+                                        mAacEncode.encode(readSize3, XAudioUtils.shortToBytes(mPCMBuffer), mFileOutputStream);
+                                    }
+                                    calculateRealVolume(mPCMBuffer, readSize3);
+                                    sendData(mPCMBuffer, readSize3);
+                                } else {
+                                    if (!mSendError) {
+                                        mSendError = true;
+                                        mIsRecording = false;
+                                        isError = true;
+                                    }
+                                }
+                            }
+                            break;
+                        case PCM:
+                            int readSize4 = mAudioRecord.read(readBufferByte, 0, mBufferSize);
+                            if (readSize4 == AudioRecord.ERROR_INVALID_OPERATION || readSize4 == AudioRecord.ERROR_BAD_VALUE) {
+                                if (!mSendError) {
+                                    mSendError = true;
+                                    Log.e(TAG, "run: 请检查是否有麦克风权限");
+                                    mIsRecording = false;
+                                    isError = true;
+                                }
+                            } else {
+                                if (readSize4 > 0) {
+                                    if (mPause) {
+                                        continue;
+                                    }
+
                                     if (mFileOutputStream != null) {
                                         mFileOutputStream.write(readBufferByte, 0, mBufferSize);
                                     }
-                                    break;
+                                    calculateRealVolume(mPCMBuffer, readSize4);
+                                    sendData(mPCMBuffer, readSize4);
+                                } else {
+                                    if (!mSendError) {
+                                        mSendError = true;
+                                        mIsRecording = false;
+                                        isError = true;
+                                    }
+                                }
                             }
-                            calculateRealVolume(mPCMBuffer, readSize);
-                            sendData(mPCMBuffer, readSize);
-                        } else {
-                            if (!mSendError) {
-                                mSendError = true;
-                                mIsRecording = false;
-                                isError = true;
-                            }
-                        }
+                            break;
+
+
                     }
                 }
                 // release and finalize audioRecord
                 mAudioRecord.stop();
                 mAudioRecord.release();
                 mAudioRecord = null;
-                // stop the encoding thread and try to wait
-                // until the thread finishes its job
-                if(mRecordConfig.outputFormat == AudioRecordConfig.OutputFormat.MP3){
-                    if (isError) {
-                        mEncodeThread.sendErrorMessage();
-                    } else {
-                        mEncodeThread.sendStopMessage();
-                    }
-                }
 
+                // 后续的一些结尾处理
                 switch (mRecordConfig.outputFormat) {
+                    case MP3:
+                        // 根据readSize的错误码或者size来确定mp3录音是否结束
+                        if (isError) {
+                            mEncodeThread.sendErrorMessage();
+                        } else {
+                            mEncodeThread.sendStopMessage();
+                        }
+                        break;
                     case WAV:
                         int sampleRate = mRecordConfig.sampleRate;
                         int channel = mRecordConfig.channelConfig;
@@ -295,7 +369,6 @@ public class MP3Recorder extends BaseRecorder {
                 e.printStackTrace();
             }
         });
-
 
 
     }

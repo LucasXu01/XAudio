@@ -94,7 +94,8 @@ public class Mp3RecordSampleActivity extends AppCompatActivity {
                 AudioRecordConfig.SampleRate.SAMPPLERATE_44100,
                 AudioFormat.CHANNEL_IN_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT,
-                AudioRecordConfig.OutputFormat.PCM);
+                AudioRecordConfig.OutputFormat.MP3);
+
         mRecorder = new MP3Recorder(mConfig, PathUtils.getExternalStoragePath() + "/XAudio/", UUID.randomUUID().toString());
         int size = getScreenWidth(this) / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
