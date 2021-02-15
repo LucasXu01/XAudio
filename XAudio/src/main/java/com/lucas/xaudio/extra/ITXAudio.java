@@ -1,8 +1,8 @@
 package com.lucas.xaudio.extra;
 
-import com.lucas.xaudio.mediaplayer.core.AudioController;
-import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;
-import com.lucas.xaudio.mediaplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.core.AudioController;
+import com.lucas.xaudio.audioplayer.events.AudioFavouriteEvent;
+import com.lucas.xaudio.audioplayer.model.AudioBean;
 
 import java.util.ArrayList;
 

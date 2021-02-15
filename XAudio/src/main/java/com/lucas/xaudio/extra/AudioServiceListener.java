@@ -1,11 +1,11 @@
 package com.lucas.xaudio.extra;
 
 
-import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioLoadEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioPlayModeEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioProgressEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioReleaseEvent;
+import com.lucas.xaudio.audioplayer.events.AudioFavouriteEvent;
+import com.lucas.xaudio.audioplayer.events.AudioLoadEvent;
+import com.lucas.xaudio.audioplayer.events.AudioPlayModeEvent;
+import com.lucas.xaudio.audioplayer.events.AudioProgressEvent;
+import com.lucas.xaudio.audioplayer.events.AudioReleaseEvent;
 
 /**
  * 音频基本础对外接口

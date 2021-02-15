@@ -1,4 +1,4 @@
-package com.lucas.audioSample.custom;
+package com.lucas.xaudio.audioplayer.core;
 
 import android.app.Service;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import com.lucas.xaudio.audioplayer.events.AudioProgressEvent;
 import com.lucas.xaudio.audioplayer.events.AudioReleaseEvent;
 import com.lucas.xaudio.audioplayer.view.MusicNotificationHelper;
 import com.lucas.xaudio.audioplayer.view.NotificationHelperListener;
-import com.lucas.audioSample.view.MusicPlayerActivity;
 
 import androidx.annotation.Nullable;
 
@@ -23,11 +22,12 @@ import static com.lucas.xaudio.XAudio.ACTION_STATUS_BAR;
 
 
 /**
- * 自定义的音乐后台服务
- * 更新notification状态
+ * 音乐后台服务,并更新notification状态
  */
-public class CustomMusicService extends Service implements NotificationHelperListener {
+public class MusicService extends Service implements NotificationHelperListener {
 
+    private static String DATA_AUDIOS = "AUDIOS";
+    private static String ACTION_START = "ACTION_START";
     private NotificationReceiver mReceiver;
 
     @Nullable
@@ -44,7 +44,7 @@ public class CustomMusicService extends Service implements NotificationHelperLis
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        MusicNotificationHelper.getInstance().init(this, new Intent(this, MusicPlayerActivity.class));
+        MusicNotificationHelper.getInstance().init(this, XAudio.getInstance().getNotificationIntent());
         return super.onStartCommand(intent, flags, startId);
     }
 

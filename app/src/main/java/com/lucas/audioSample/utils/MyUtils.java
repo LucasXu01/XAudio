@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-import com.lucas.xaudio.mediaplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.model.AudioBean;
 
 import java.util.ArrayList;
 

@@ -13,7 +13,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.lucas.xaudio.base.BaseRecorder;
+import com.lucas.xaudio.recorder.BaseRecorder;
 import com.lucas.xaudio.recorder.waveview.Manager;
 
 import java.io.IOException;

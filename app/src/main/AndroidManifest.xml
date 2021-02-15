@@ -37,12 +37,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.lucas.audioSample.view.SimpleUseActivity"/>
-        <activity android:name="com.lucas.audioSample.view.Mp3RecordSampleActivity"/>
-        <activity android:name="com.lucas.audioSample.view.AudioRecorderActivity"/>
+        <activity android:name="com.lucas.audioSample.view.PlayerSampleActivity"/>
+        <activity android:name="com.lucas.audioSample.view.RecordSampleActivity"/>
 
         <activity
-            android:name="com.lucas.audioSample.view.XMusicPlayerActivity"
+            android:name="com.lucas.audioSample.view.MusicPlayerActivity"
             android:enabled="true"
             android:exported="false"
             android:launchMode="singleTask" />

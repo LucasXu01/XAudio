@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:waveview="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RadioGroup
+        android:id="@+id/rg_OutputFormat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        >
+
+        <RadioButton
+            android:id="@+id/rb_rbOutputFormat_mp3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="mp3格式"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rb_OutputFormat_aac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="aac格式"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbOutputFormat_wav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="wav格式"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/mr_rbOutputFormat_pcm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pcm格式"
+            android:textSize="12sp" />
+
+    </RadioGroup>
+
+
+    <LinearLayout
+        android:id="@+id/btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rg_OutputFormat"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_record"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="录音" />
+
+        <Button
+            android:id="@+id/bt_record_pause"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:text="暂停" />
+
+        <Button
+            android:id="@+id/bt_record_stop"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="停止" />
+
+        <Button
+            android:id="@+id/bt_reset"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="重置" />
+
+    </LinearLayout>
+
+
+    <com.lucas.xaudio.recorder.waveview.AudioWaveView
+        android:id="@+id/audioWave"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        waveview:waveColor="#FAFFFFFF"
+        android:layout_below="@+id/btn_layout"
+        android:layout_marginTop="15dp"
+        />
+
+
+</RelativeLayout>

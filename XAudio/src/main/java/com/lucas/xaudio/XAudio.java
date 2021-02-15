@@ -5,17 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.lucas.xaudio.mediaplayer.core.AudioController;
-import com.lucas.xaudio.mediaplayer.core.MusicService;
+import com.lucas.xaudio.audioplayer.core.AudioController;
+import com.lucas.xaudio.audioplayer.core.MusicService;
 import com.lucas.xaudio.extra.AudioServiceListener;
 import com.lucas.xaudio.extra.ITXAudio;
-import com.lucas.xaudio.mediaplayer.events.AudioFavouriteEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioLoadEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioPauseEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioPlayModeEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioProgressEvent;
-import com.lucas.xaudio.mediaplayer.events.AudioStartEvent;
-import com.lucas.xaudio.mediaplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.events.AudioFavouriteEvent;
+import com.lucas.xaudio.audioplayer.events.AudioLoadEvent;
+import com.lucas.xaudio.audioplayer.events.AudioPauseEvent;
+import com.lucas.xaudio.audioplayer.events.AudioPlayModeEvent;
+import com.lucas.xaudio.audioplayer.events.AudioProgressEvent;
+import com.lucas.xaudio.audioplayer.events.AudioStartEvent;
+import com.lucas.xaudio.audioplayer.model.AudioBean;
 import com.lucas.xaudio.utils.XAudioUtils;
 
 import org.greenrobot.eventbus.EventBus;
