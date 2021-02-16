@@ -34,9 +34,9 @@ dependencies {
 　
 
 ## 效果显示
-<img src="./01.jpg" width="240px" height="426px"/>
-<img src="./02.jpg" width="240px" height="426px"/>
-　
+| demo：音乐播放器   | 录音  |
+|:-----------:|:--------:|
+|![](images/01.png) | ![](images/02.png) |
 
 
 ### QQ群，有兴趣的可以进来，有问题可以提问交流：317643862
