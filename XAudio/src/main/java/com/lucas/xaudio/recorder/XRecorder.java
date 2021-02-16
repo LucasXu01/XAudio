@@ -86,12 +86,18 @@ public class XRecorder extends BaseRecorder {
      * @param fileName     录音的文件名称
      */
     public XRecorder(AudioRecordConfig recordConfig, String filePath, String fileName) {
-        if(recordConfig == null){
-            new XRecorder(filePath, fileName);
-            return;
+        if (recordConfig == null) {
+            //默认录音是mp3格式
+            this.mRecordConfig = new AudioRecordConfig(
+                    MediaRecorder.AudioSource.MIC,
+                    AudioRecordConfig.SampleRate.SAMPPLERATE_44100,
+                    AudioFormat.CHANNEL_IN_STEREO,
+                    AudioFormat.ENCODING_PCM_16BIT,
+                    AudioRecordConfig.OutputFormat.MP3);
+        } else {
+            this.mRecordConfig = recordConfig;
         }
         mExecutor = Executors.newCachedThreadPool();
-        this.mRecordConfig = recordConfig;
         File file = new File(filePath);
         if (!file.exists()) {
             if (!file.mkdirs()) {
@@ -99,17 +105,25 @@ public class XRecorder extends BaseRecorder {
                 return;
             }
         }
-        this.fileStr = filePath + fileName + recordConfig.outputFormat.getName();
+        this.fileStr = filePath + fileName + mRecordConfig.outputFormat.getName();
     }
 
     public XRecorder(String filePath, String fileName) {
-        //默认录音是mp3格式
-        this(new AudioRecordConfig(
+        mExecutor = Executors.newCachedThreadPool();
+        this.mRecordConfig = new AudioRecordConfig(
                 MediaRecorder.AudioSource.MIC,
                 AudioRecordConfig.SampleRate.SAMPPLERATE_44100,
                 AudioFormat.CHANNEL_IN_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT,
-                AudioRecordConfig.OutputFormat.MP3), filePath, fileName);
+                AudioRecordConfig.OutputFormat.MP3);
+        File file = new File(filePath);
+        if (!file.exists()) {
+            if (!file.mkdirs()) {
+                Log.e(TAG, "AudioRecord: 创建录音文件失败");
+                return;
+            }
+        }
+        this.fileStr = filePath + fileName + mRecordConfig.outputFormat.getName();
     }
 
     /**
