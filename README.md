@@ -1,6 +1,6 @@
 ## XAudio
 
-### XAudio：音频一行播放，支持多种音频格式如mp3音频录制
+### XAudio：音频一行播放，Android音频录制，支持多种音频格式如mp3音频录制及可视化
 ---------------------------------
 
 
@@ -85,6 +85,7 @@ public class myApp extends Application {
 
 ### Demo
 [Demo下载](./XAudioDemo.apk)
+<br/>
 或扫描下面的二维码安装<br/>
 ![XAudioDemo](https://www.pgyer.com/app/qrcode/hsVA)
 
