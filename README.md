@@ -84,7 +84,7 @@ public class myApp extends Application {
 <br/> 5 若依赖的三方库（如Glide等）版本冲突，可下载库自行依赖，修改三方库的依赖版本
 
 ### Demo
-[Demo下载](https://www.pgyer.com/hsVA)
+[Demo下载](./XAudioDemo.apk)
 或扫描下面的二维码安装<br/>
 ![XAudioDemo](https://www.pgyer.com/app/qrcode/hsVA)
 
