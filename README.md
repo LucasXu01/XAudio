@@ -3,6 +3,7 @@
 ### XAudio：音频一行播放，Android音频录制，支持多种音频格式如mp3音频录制及可视化
 ---------------------------------
 
+[ ![Download](https://api.bintray.com/packages/lucasxu/maven/xaudio/images/download.svg?version=0.9.2) ](https://bintray.com/lucasxu/maven/xaudio/0.9.2/link)
 
 * 一行播放网络音频
 * 可快速实现音乐播放器功能
@@ -75,6 +76,8 @@ public class myApp extends Application {
 
  以上就是XAudio最简单最核心的两个功能使用的介绍了，更多地功能比如：通知、服务、音频波形图、录制音频的格式和参数选择等等，可具体参考Demo源码。
 
+<br/>
+
 ### 注意点&&常见问题：
 <br/> 1 网络音频播放需要网络权限，音频录制需要存储读写和录音权限。权限申请请用户自行解决，所需权限可参考[AndroidManifest.xml](./app/src/main/AndroidManifest.xml)和Demo
 <br/> 2 若网络音频无法播放，检查歌曲链接，是否是https链接，或是否配置了network_security_config.xml
@@ -86,7 +89,10 @@ public class myApp extends Application {
 ### Demo
 [Demo下载](./XAudioDemo.apk)
 <br/>
-或扫描下面的二维码安装<br/>
+或扫描下面的二维码安装
+
+<br/>
+
 ![XAudioDemo](https://www.pgyer.com/app/qrcode/hsVA)
 
 
