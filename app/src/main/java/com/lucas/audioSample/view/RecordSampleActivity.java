@@ -36,7 +36,6 @@ public class RecordSampleActivity extends AppCompatActivity {
     private AudioWaveView audioWave;
     private RadioGroup rg_OutputFormat;
 
-    public String filePath;
     XRecorder mRecorder;
     boolean mIsRecord = false;
 
@@ -204,8 +203,6 @@ public class RecordSampleActivity extends AppCompatActivity {
      */
     private void resolveError() {
         resolveNormalUI();
-        FileUtils.delete(filePath);
-        filePath = "";
         if (mRecorder != null && mRecorder.isRecording()) {
             mRecorder.stop();
             audioWave.stopView();
@@ -216,7 +213,6 @@ public class RecordSampleActivity extends AppCompatActivity {
      * 重置
      */
     private void resolveResetPlay() {
-        filePath = "";
         resolveNormalUI();
     }
 

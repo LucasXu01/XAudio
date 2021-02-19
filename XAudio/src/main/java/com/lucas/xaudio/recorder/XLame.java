@@ -1,11 +1,5 @@
 package com.lucas.xaudio.recorder;
 
-/**
- * @Description: Lame的jni映射库
- * @Author: Kosmos
- * @Date: 2019.05.24 23:36
- * @Email: KosmoSakura@gmail.com
- */
 public class XLame {
     static {
         System.loadLibrary("native-lib");

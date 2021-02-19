@@ -1,6 +1,6 @@
-# XAudio
+## XAudio
 
-### XAudio：音频播放器，支持多种格式音频录制
+### XAudio：音频一行播放，支持多种音频格式如mp3音频录制
 ---------------------------------
 
 
@@ -14,24 +14,80 @@
 * 支持自定义音波图的线大小、方向和绘制偏移。
 
 
+## 快速开始
 
-#### 在你的项目project下的build.gradle添加
-```
-allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
-}
-```
-#### 在module下的build.gradle添加依赖
-```
+#### 1. 在module下的build.gradle添加依赖
+
+``` groovy
 dependencies {
-     implementation 'com.lucas.xaudio:xaudio:0.9.1'
-}
 
+    // -------------------- 以下4个库是必须依赖的 ----------------------------
+       implementation 'com.google.android.material:material:1.2.1'
+       implementation 'androidx.recyclerview:recyclerview:1.1.0'
+       implementation 'org.greenrobot:eventbus:3.2.0'
+       implementation "com.github.bumptech.glide:glide:4.12.0"
+    // -------------------- 以上4个库是必须依赖的 ----------------------------
+
+    implementation 'com.lucas.xaudio:xaudio:0.9.2'
+
+}
 ```
-　
+
+#### 2. 在app中注册
+
+```java
+public class myApp extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        //音频SDK初始化
+        XAudio.getInstance().init(this);
+    }
+}
+```
+
+#### 3. 使用XAudio
+
+播放音频
+
+```java
+        XAudio.getInstance()
+                .addAudio(new AudioBean("https://sr-sycdn.kuwo.cn/resource/n2/33/25/2629654819.mp3"))
+                .playAudio();
+```
+ 录制音频
+ ```java
+        // 开始录音 默认数mp3格式
+        mRecorder = new XRecorder("filePath:你的录音保存路劲", "fileName:录音保存的名称");
+        try {
+             mRecorder.start();
+             ...
+         } catch (IOException e) {
+             e.printStackTrace();
+             ...
+         }
+
+        ...
+        //结束录音
+        mRecorder.stop();
+
+ ```
+
+ 以上就是XAudio最简单最核心的两个功能使用的介绍了，更多地功能比如：通知、服务、音频波形图、录制音频的格式和参数选择等等，可具体参考Demo源码。
+
+### 注意点&&常见问题：
+1 网络音频播放需要网络权限，音频录制需要存储读写和录音权限。权限申请请用户自行解决，所需权限可参考[AndroidManifest.xml](./app/src/main/AndroidManifest.xml)和Demo
+2 若网络音频无法播放，检查歌曲链接，是否是https链接，或是否配置了network_security_config.xml
+  测试歌曲链接 [链接](https://m10.music.126.net/20210218222407/cc009d5d43af4080a480d3ee7667f470/ymusic/obj/w5zDlMODwrDDiGjCn8Ky/3087361631/ea94/69e0/6a9e/c9e5b3d7a25d66f5b6b28ec92cdec944.mp3)
+3 XRecorder参数中，所需的文件路径地址若不存在，需要自行创建，具体可参考demo
+4 若按照文档来还是报错：E/AndroidRuntime: FATAL EXCEPTION: main java.lang.NoSuchMethodError: No static method metafactory，请注意XAudio使用了Lambda，build.gradle中需加上1.8支持（可参考Demo）
+5 若依赖的三方库（如Glide等）版本冲突，可下载库自行依赖，修改三方库的依赖版本
+
+#### Demo下载
+[点击下载 XAudioDemo.apk](https://www.pgyer.com/hsVA)
+或扫描下面的二维码安装
+![XAudioDemo](https://www.pgyer.com/app/qrcode/hsVA)
+
 
 ## 效果显示
 | 音频播放   | 音频录制  |

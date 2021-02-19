@@ -24,11 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
@@ -96,6 +91,38 @@ public class ImageLoaderManager {
                 });
     }
 
+//    public void displayImageForViewGroup(final ViewGroup group, String url) {
+//        Glide.with(group.getContext())
+//                .asBitmap()
+//                .load(url)
+//                .apply(initCommonRequestOption())
+//                .into(new SimpleTarget<Bitmap>() {//设置宽高
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap resource,
+//                                                @Nullable Transition<? super Bitmap> transition) {
+//                        final Bitmap res = resource;
+//                        Observable.just(resource)
+//                                .map(new Function<Bitmap, Drawable>() {
+//                                    @Override
+//                                    public Drawable apply(Bitmap bitmap) {
+//                                        Drawable drawable = new BitmapDrawable(
+//                                                Utils.doBlur(res, 100, true)
+//                                        );
+//                                        return drawable;
+//                                    }
+//                                })
+//                                .subscribeOn(Schedulers.io())
+//                                .observeOn(AndroidSchedulers.mainThread())
+//                                .subscribe(new Consumer<Drawable>() {
+//                                    @Override
+//                                    public void accept(Drawable drawable) throws Exception {
+//                                        group.setBackground(drawable);
+//                                    }
+//                                });
+//                    }
+//                });
+//    }
+
     public void displayImageForViewGroup(final ViewGroup group, String url) {
         Glide.with(group.getContext())
                 .asBitmap()
@@ -105,28 +132,14 @@ public class ImageLoaderManager {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource,
                                                 @Nullable Transition<? super Bitmap> transition) {
-                        final Bitmap res = resource;
-                        Observable.just(resource)
-                                .map(new Function<Bitmap, Drawable>() {
-                                    @Override
-                                    public Drawable apply(Bitmap bitmap) {
-                                        Drawable drawable = new BitmapDrawable(
-                                                Utils.doBlur(res, 100, true)
-                                        );
-                                        return drawable;
-                                    }
-                                })
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<Drawable>() {
-                                    @Override
-                                    public void accept(Drawable drawable) throws Exception {
-                                        group.setBackground(drawable);
-                                    }
-                                });
+                        Drawable drawable = new BitmapDrawable(Utils.doBlur(resource, 100, true));
+                        group.setBackground(drawable);
                     }
                 });
     }
+
+
+
 
     /**
      * 为非view加载图片

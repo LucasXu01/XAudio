@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.lucas.audioSample.R;
+import com.lucas.xaudio.XAudio;
+import com.lucas.xaudio.audioplayer.model.AudioBean;
 import com.permissionx.guolindev.PermissionX;
 import com.permissionx.guolindev.callback.RequestCallback;
 
