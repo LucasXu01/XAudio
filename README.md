@@ -59,7 +59,7 @@ public class myApp extends Application {
  录制音频
  ```java
         // 开始录音 默认数mp3格式
-        mRecorder = new XRecorder("filePath:你的录音保存路劲", "fileName:录音保存的名称");
+        mRecorder = new XRecorder("filePath:录音文件保存路径", "fileName:录音文件保存名称");
         try {
              mRecorder.start();
              ...

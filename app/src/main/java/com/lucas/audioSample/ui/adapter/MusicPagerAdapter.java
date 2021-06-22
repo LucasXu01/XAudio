@@ -1,4 +1,4 @@
-package com.lucas.xaudio.audioplayer.view.adapter;
+package com.lucas.audioSample.ui.adapter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -9,11 +9,10 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
-
-import com.lucas.xaudio.R;
+import com.lucas.audioSample.R;
+import com.lucas.library.XImg;
 import com.lucas.xaudio.audioplayer.core.AudioController;
-import com.lucas.xaudio.audioplayer.image_loader.ImageLoaderManager;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.model.BaseAudioBean;
 
 import java.util.ArrayList;
 
@@ -29,11 +28,11 @@ public class MusicPagerAdapter extends PagerAdapter {
     /*
      * data
      */
-    private ArrayList<AudioBean> mAudioBeans;
+    private ArrayList<BaseAudioBean> mAudioBeans;
     private SparseArray<ObjectAnimator> mAnims = new SparseArray<>();
     private Callback mCallback;
 
-    public MusicPagerAdapter(ArrayList<AudioBean> audioBeans, Context context, Callback callback) {
+    public MusicPagerAdapter(ArrayList<BaseAudioBean> audioBeans, Context context, Callback callback) {
         mAudioBeans = audioBeans;
         mContext = context;
         mCallback = callback;
@@ -44,8 +43,8 @@ public class MusicPagerAdapter extends PagerAdapter {
         View rootView = LayoutInflater.from(mContext).inflate(R.layout.indictor_item_view, null);
         ImageView imageView = rootView.findViewById(R.id.circle_view);
         container.addView(rootView);
-        ImageLoaderManager.getInstance()
-                .displayImageForCircle(imageView, mAudioBeans.get(position).albumPic);
+        XImg.getIns()
+                .loadImgCircle(imageView, mAudioBeans.get(position).albumPic);
         //只在无动化时创建
         mAnims.put(position, createAnim(rootView)); // 将动画缓存起来
         return rootView;

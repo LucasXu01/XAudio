@@ -24,7 +24,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         >
-        <activity android:name="com.lucas.audioSample.view.MainActivity">
+        <activity android:name="com.lucas.audioSample.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,18 +32,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.lucas.audioSample.view.PlayerSampleActivity"/>
-        <activity android:name="com.lucas.audioSample.view.RecordSampleActivity"/>
-
-        <activity
-            android:name="com.lucas.audioSample.view.MusicPlayerActivity"
-            android:enabled="true"
-            android:exported="false"
-            android:launchMode="singleTask" />
+        <activity android:name="com.lucas.audioSample.ui.PlayerSampleActivity"/>
+        <activity android:name="com.lucas.audioSample.ui.RecordSampleActivity"/>
+        <activity android:name="com.lucas.audioSample.ui.MusicPlayerActivity" />
 
 
         <service
-            android:name="com.lucas.audioSample.custom.CustomMusicService"
+            android:name="com.lucas.audioSample.extra.CustomMusicService"
             android:enabled="true"
             android:exported="false" />
 

@@ -1,8 +1,7 @@
-package com.lucas.xaudio.extra;
+package com.lucas.xaudio;
 
 import com.lucas.xaudio.audioplayer.core.AudioController;
-import com.lucas.xaudio.audioplayer.events.AudioFavouriteEvent;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.model.BaseAudioBean;
 
 import java.util.ArrayList;
 
@@ -10,11 +9,9 @@ public interface ITXAudio {
 
     /**
      * 添加音频 
-     * 注意：必须先setQueen，才能继续add，否则会报queen null
      */
-    ITXAudio setAudioQueen(ArrayList<AudioBean> queue);
-    ITXAudio addAudio(AudioBean bean);
-    ITXAudio addAudio(ArrayList<AudioBean> queue);
+    ITXAudio addAudio(BaseAudioBean bean);
+    ITXAudio addAudio(ArrayList<BaseAudioBean> queue);
     
     /**
      * 播放 音频
@@ -62,19 +59,14 @@ public interface ITXAudio {
     boolean isStartState();
 
     /**
-     * 喜欢曲子
-     */
-    void onAudioFavouriteEvent(AudioFavouriteEvent event);
-
-    /**
      * 移除某个曲子
      */
-    void removeAudio(AudioBean audioBean);
+    void removeAudio(BaseAudioBean audioBean);
 
     /**
      * 移除所有曲子
      */
-    void clearAudio();
+    void clearAudioList();
 
 
 

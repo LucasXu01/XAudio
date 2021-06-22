@@ -6,6 +6,7 @@ import android.media.MediaRecorder;
 import android.os.Process;
 import android.util.Log;
 
+import com.lucas.xaudio.XAudio;
 import com.lucas.xaudio.recorder.aac.AACEncode;
 import com.lucas.xaudio.recorder.mp3.MP3DataEncodeThread;
 import com.lucas.xaudio.recorder.mp3.PCMFormat;
@@ -82,10 +83,9 @@ public class XRecorder extends BaseRecorder {
      * 16 bits pcm
      *
      * @param recordConfig 录音参数 See {@link AudioRecordConfig}
-     * @param filePath     录音的文件路径
      * @param fileName     录音的文件名称
      */
-    public XRecorder(AudioRecordConfig recordConfig, String filePath, String fileName) {
+    public XRecorder(AudioRecordConfig recordConfig, String fileName) {
         if (recordConfig == null) {
             //默认录音是mp3格式
             this.mRecordConfig = new AudioRecordConfig(
@@ -97,39 +97,31 @@ public class XRecorder extends BaseRecorder {
         } else {
             this.mRecordConfig = recordConfig;
         }
+
         mExecutor = Executors.newCachedThreadPool();
-        File file = new File(filePath);
+
+        String fileStrDir = XAudio.getInstance().getContext().getExternalFilesDir(null) + "/audio_recording/";
+        File file = new File(fileStrDir);
         if (!file.exists()) {
             if (!file.mkdirs()) {
-                Log.e(TAG, "AudioRecord: 创建录音文件失败");
+                Log.e(TAG, "AudioRecord: XRecorder 创建录音文件夹失败");
                 return;
             }
         }
-        this.fileStr = filePath + fileName + mRecordConfig.outputFormat.getName();
+        this.fileStr = fileStrDir + fileName + mRecordConfig.outputFormat.getName();
     }
 
-    public XRecorder(String filePath, String fileName) {
-        mExecutor = Executors.newCachedThreadPool();
-        this.mRecordConfig = new AudioRecordConfig(
-                MediaRecorder.AudioSource.MIC,
-                AudioRecordConfig.SampleRate.SAMPPLERATE_44100,
-                AudioFormat.CHANNEL_IN_STEREO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                AudioRecordConfig.OutputFormat.MP3);
-        File file = new File(filePath);
-        if (!file.exists()) {
-            if (!file.mkdirs()) {
-                Log.e(TAG, "AudioRecord: 创建录音文件失败");
-                return;
-            }
-        }
-        this.fileStr = filePath + fileName + mRecordConfig.outputFormat.getName();
+    public XRecorder(String fileName) {
+        this(null, fileName);
     }
 
     /**
      * Initialize audio recorder
      */
     private void initAudioRecorder() throws IOException {
+        if (fileStr == null) {
+            Log.e(TAG, "AudioRecord: 创建录音文件失败 fileStr为null");
+        }
         mRecordFile = new File(fileStr);
         if (mRecordConfig == null) {
             Log.e(TAG, "initAudioRecorder: mRecordConfig为空！");

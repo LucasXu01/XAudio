@@ -1,28 +1,32 @@
-package com.lucas.audioSample.view;
+package com.lucas.audioSample.ui;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.AudioFormat;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blankj.utilcode.util.FileUtils;
-import com.blankj.utilcode.util.PathUtils;
+import com.blankj.utilcode.util.ConvertUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.lucas.audioSample.R;
-import com.lucas.audioSample.utils.MyUtils;
 import com.lucas.xaudio.recorder.AudioRecordConfig;
 import com.lucas.xaudio.recorder.XRecorder;
 import com.lucas.xaudio.recorder.waveview.AudioWaveView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import static com.lucas.audioSample.utils.MyUtils.getScreenWidth;
 
 public class RecordSampleActivity extends AppCompatActivity {
 
@@ -33,6 +37,7 @@ public class RecordSampleActivity extends AppCompatActivity {
     private Button bt_record_pause;
     private Button bt_record_stop;
     private Button bt_reset;
+    private TextView tv_opendir;
     private AudioWaveView audioWave;
     private RadioGroup rg_OutputFormat;
 
@@ -52,6 +57,7 @@ public class RecordSampleActivity extends AppCompatActivity {
         bt_record_pause = findViewById(R.id.bt_record_pause);
         bt_record_stop = findViewById(R.id.bt_record_stop);
         bt_reset = findViewById(R.id.bt_reset);
+        tv_opendir = findViewById(R.id.tv_opendir);
         audioWave = (AudioWaveView) findViewById(R.id.audioWave);
         rg_OutputFormat = findViewById(R.id.rg_OutputFormat);
 
@@ -127,14 +133,14 @@ public class RecordSampleActivity extends AppCompatActivity {
     private void resolveRecord() {
 
 
-        int offset = MyUtils.dip2px(this, 7);
+        int offset = ConvertUtils.dp2px(7);
 
-        mRecorder = new XRecorder(mConfig, PathUtils.getExternalStoragePath() + "/XAudio/", UUID.randomUUID().toString());
-        int size = getScreenWidth(this) / offset;//控件默认的间隔是1
+        mRecorder = new XRecorder(mConfig, UUID.randomUUID().toString());
+        int size = ScreenUtils.getScreenWidth() / offset;//控件默认的间隔是1
         mRecorder.setDataList(audioWave.getRecList(), size);
 
         //高级用法
-//        int size2 = (getScreenWidth(this) / 2) / MyUtils.dip2px(this, 1);
+//        int size2 = (ScreenUtils.getScreenWidth() / 2) / ConvertUtils.dp2px( 1);
 //        mRecorder.setWaveSpeed(600);
 //        mRecorder.setDataList(audioWave.getRecList(), size2);
 //        audioWave.setDrawStartOffset((getScreenWidth(this) / 2));
@@ -162,6 +168,8 @@ public class RecordSampleActivity extends AppCompatActivity {
         }
         resolveRecordUI();
         mIsRecord = true;
+
+        tv_opendir.setText( "文件浏览器中的录音目录：" + getExternalFilesDir(null) + "/audio_recording/");
     }
 
     /**

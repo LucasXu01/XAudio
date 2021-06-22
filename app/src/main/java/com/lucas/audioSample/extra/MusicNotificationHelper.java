@@ -1,4 +1,4 @@
-package com.lucas.xaudio.audioplayer.view;
+package com.lucas.audioSample.extra;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.widget.RemoteViews;
 
-import com.lucas.xaudio.R;
+import com.lucas.audioSample.R;
+import com.lucas.library.XImg;
 import com.lucas.xaudio.XAudio;
 import com.lucas.xaudio.audioplayer.core.AudioController;
-import com.lucas.xaudio.audioplayer.image_loader.ImageLoaderManager;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.model.BaseAudioBean;
+import com.lucas.xaudio.audioplayer.NotificationHelperListener;
+
 import androidx.core.app.NotificationCompat;
 
 /**
@@ -33,7 +35,7 @@ public class MusicNotificationHelper {
   private NotificationHelperListener mListener;
   private String packageName;
   //当前要播的歌曲Bean
-  private AudioBean mAudioBean;
+  private BaseAudioBean mAudioBean;
 
   public static MusicNotificationHelper getInstance() {
     return SingletonHolder.instance;
@@ -163,14 +165,14 @@ public class MusicNotificationHelper {
   /**
    * 显示Notification的加载状态
    */
-  public void showLoadStatus(AudioBean bean) {
+  public void showLoadStatus(BaseAudioBean bean) {
     //防止空指针crash
     mAudioBean = bean;
     if (mRemoteViews != null) {
       mRemoteViews.setImageViewResource(R.id.play_view, R.mipmap.note_btn_pause_white);
       mRemoteViews.setTextViewText(R.id.title_view, mAudioBean.name);
       mRemoteViews.setTextViewText(R.id.tip_view, mAudioBean.album);
-      ImageLoaderManager.getInstance()
+      XImg.getIns()
           .displayImageForNotification(XAudio.getInstance().getContext(), mRemoteViews, R.id.image_view,
               mNotification, NOTIFICATION_ID, mAudioBean.albumPic);
       //更新收藏view
@@ -185,7 +187,7 @@ public class MusicNotificationHelper {
       mSmallRemoteViews.setImageViewResource(R.id.play_view, R.mipmap.note_btn_pause_white);
       mSmallRemoteViews.setTextViewText(R.id.title_view, mAudioBean.name);
       mSmallRemoteViews.setTextViewText(R.id.tip_view, mAudioBean.album);
-      ImageLoaderManager.getInstance()
+      XImg.getIns()
           .displayImageForNotification(XAudio.getInstance().getContext(), mSmallRemoteViews, R.id.image_view,
               mNotification, NOTIFICATION_ID, mAudioBean.albumPic);
 

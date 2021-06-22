@@ -21,10 +21,9 @@
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/xaudio_back"
             android:padding="4dp"
             android:scaleType="centerCrop"
-            />
+            android:src="@mipmap/xaudio_back" />
 
         <ImageView
             android:id="@+id/share_view"
@@ -32,10 +31,9 @@
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/audio_share"
-            android:scaleType="centerCrop"
             android:padding="4dp"
-            />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/audio_share" />
 
         <LinearLayout
             android:id="@+id/title_view"
@@ -46,8 +44,7 @@
             android:layout_marginEnd="12dp"
             android:layout_toStartOf="@id/share_view"
             android:layout_toEndOf="@id/back_view"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/album_view"
@@ -67,25 +64,24 @@
             android:id="@+id/author_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="周杰伦"
-            android:textColor="#ffffff"
-            android:textSize="12sp"
-            android:layout_marginLeft="50dp"
             android:layout_below="@+id/title_view"
             android:layout_marginStart="12dp"
-            android:layout_toEndOf="@id/back_view"
+            android:layout_marginLeft="50dp"
             android:layout_marginTop="8dp"
-            />
+            android:layout_toEndOf="@id/back_view"
+            android:text="周杰伦"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
 
     </RelativeLayout>
 
-    <com.lucas.xaudio.audioplayer.view.IndictorView
+    <com.lucas.audioSample.view.IndictorView
+        android:id="@+id/indictorView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title_layout" >
+        android:layout_below="@id/title_layout">
 
-
-    </com.lucas.xaudio.audioplayer.view.IndictorView>
+    </com.lucas.audioSample.view.IndictorView>
 
 
     <!--底部布局-->
@@ -225,7 +221,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="30dp"
-            android:paddingEnd="30dp">
+            android:paddingEnd="30dp"
+            >
 
             <LinearLayout
                 android:layout_width="0dp"

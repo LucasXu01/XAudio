@@ -1,4 +1,4 @@
-package com.lucas.audioSample.view;
+package com.lucas.audioSample.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,8 +7,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.lucas.audioSample.R;
-import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
 import com.permissionx.guolindev.PermissionX;
 import com.permissionx.guolindev.callback.RequestCallback;
 

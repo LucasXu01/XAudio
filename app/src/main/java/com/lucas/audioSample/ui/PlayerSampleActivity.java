@@ -1,11 +1,11 @@
-package com.lucas.audioSample.view;
+package com.lucas.audioSample.ui;
 
 import android.os.Bundle;
 import android.widget.Button;
 
 import com.lucas.audioSample.R;
 import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.model.BaseAudioBean;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +21,7 @@ public class PlayerSampleActivity extends AppCompatActivity {
         bt_play_pause = findViewById(R.id.bt_play_pause);
 
         XAudio.getInstance()
-                .addAudio(new AudioBean("http://music.163.com/song/media/outer/url?id=1459783374.mp3"))
+                .addAudio(new BaseAudioBean("http://music.163.com/song/media/outer/url?id=1459783374.mp3"))
                 .playAudio();
 
         // 播放、暂停网络 mp3 音频
@@ -33,7 +33,8 @@ public class PlayerSampleActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        XAudio.getInstance().clearAudio();
+        XAudio.getInstance().clearAudioList();
+        XAudio.getInstance().releaseAudio();
         super.onDestroy();
     }
 }

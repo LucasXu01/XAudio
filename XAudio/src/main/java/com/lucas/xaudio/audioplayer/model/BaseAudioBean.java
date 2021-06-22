@@ -7,7 +7,7 @@ import java.io.Serializable;
  * 1.歌曲实体
  * 2.引入greendao以后扩展了许多
  */
-public class AudioBean implements Serializable {
+public class BaseAudioBean implements Serializable {
 
     // TODO: 2021/1/12  id一定需要   最下面的相等需要用到  构造方法必须加上id的
 
@@ -26,13 +26,13 @@ public class AudioBean implements Serializable {
     //时长
     public String totalTime;
 
-    public AudioBean(String mUrl) {
+    public BaseAudioBean(String mUrl) {
         this.mUrl = mUrl;
     }
 
-    public AudioBean(String id, String mUrl, String name, String author,
-                     String album, String albumInfo, String albumPic,
-                     String totalTime) {
+    public BaseAudioBean(String id, String mUrl, String name, String author,
+                         String album, String albumInfo, String albumPic,
+                         String totalTime) {
         this.id = id;
         this.mUrl = mUrl;
         this.name = name;
@@ -114,9 +114,9 @@ public class AudioBean implements Serializable {
         if (other == null) {
             return false;
         }
-        if (!(other instanceof AudioBean)) {
+        if (!(other instanceof BaseAudioBean)) {
             return false;
         }
-        return ((AudioBean) other).id.equals(this.id);
+        return ((BaseAudioBean) other).id.equals(this.id);
     }
 }

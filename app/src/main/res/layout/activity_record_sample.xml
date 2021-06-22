@@ -98,5 +98,14 @@
         android:layout_marginTop="15dp"
         />
 
+    <TextView
+        android:id="@+id/tv_opendir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/audioWave"
+        android:text="文件浏览器中的录音目录："
+        />
 
 </RelativeLayout>

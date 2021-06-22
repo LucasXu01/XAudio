@@ -1,4 +1,4 @@
-package com.lucas.xaudio.audioplayer.BroadcastReceiver;
+package com.lucas.audioSample.BroadcastReceiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,17 +21,20 @@ public class NotificationReceiver extends BroadcastReceiver {
         String extra = intent.getStringExtra(XAudio.EXTRA);
         switch (extra) {
             case XAudio.EXTRA_PLAY:
-                //处理播放暂停事件,可以封到AudioController中
-                AudioController.getInstance().playOrPause();
+                //处理播放暂停事件
+                XAudio.getInstance().playOrPauseAudio();
                 break;
             case XAudio.EXTRA_PRE:
-                AudioController.getInstance().previous(); //不管当前状态，直接播放
+                //上一首
+                XAudio.getInstance().previousAudio();
                 break;
             case XAudio.EXTRA_NEXT:
-                AudioController.getInstance().next();
+                //下一首
+                XAudio.getInstance().nextAudio();
                 break;
             case XAudio.EXTRA_FAV:
-                AudioController.getInstance().changeFavourite();
+                // 收藏、喜欢
+
                 break;
             case XAudio.EXTRA_CLOSE:
                 XAudio.getInstance().pauseAudio();

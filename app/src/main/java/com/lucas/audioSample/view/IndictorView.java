@@ -1,25 +1,20 @@
-package com.lucas.xaudio.audioplayer.view;
+package com.lucas.audioSample.view;
 
 import android.animation.Animator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-
-import com.lucas.xaudio.R;
+import com.lucas.audioSample.R;
+import com.lucas.audioSample.ui.adapter.MusicPagerAdapter;
 import com.lucas.xaudio.audioplayer.core.AudioController;
 import com.lucas.xaudio.audioplayer.events.AudioLoadEvent;
-import com.lucas.xaudio.audioplayer.events.AudioPauseEvent;
-import com.lucas.xaudio.audioplayer.events.AudioStartEvent;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
-import com.lucas.xaudio.audioplayer.view.adapter.MusicPagerAdapter;
+import com.lucas.xaudio.audioplayer.model.BaseAudioBean;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -41,8 +36,8 @@ public class IndictorView extends RelativeLayout implements ViewPager.OnPageChan
     /*
      * data
      */
-    private AudioBean mAudioBean; //当前播放歌曲
-    private ArrayList<AudioBean> mQueue; //播放队列
+    private BaseAudioBean mAudioBean; //当前播放歌曲
+    private ArrayList<BaseAudioBean> mQueue; //播放队列
 
     public IndictorView(Context context) {
         this(context, null);
@@ -55,7 +50,6 @@ public class IndictorView extends RelativeLayout implements ViewPager.OnPageChan
     public IndictorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
-        EventBus.getDefault().register(this);
         initData();
     }
 
@@ -89,39 +83,35 @@ public class IndictorView extends RelativeLayout implements ViewPager.OnPageChan
 
     @Override
     public void onPageSelected(int position) {
-        //指定要播放的position
-        AudioController.getInstance().setPlayIndex(position);
+        //到了指定页面需要做的事情的回调
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
         switch (state) {
             case ViewPager.SCROLL_STATE_IDLE:
-                showPlayView();
+//                showPlayView();
                 break;
             case ViewPager.SCROLL_STATE_DRAGGING:
-                showPauseView();
+//                showPauseView();
                 break;
             case ViewPager.SCROLL_STATE_SETTLING:
                 break;
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAudioLoadEvent(AudioLoadEvent event) {
         //更新viewpager为load状态
         mAudioBean = event.mAudioBean;
         showLoadView(true);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAudioPauseEvent(AudioPauseEvent event) {
+    public void onAudioPauseEvent() {
         //更新activity为暂停状态
         showPauseView();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAudioStartEvent(AudioStartEvent event) {
+    public void onAudioStartEvent() {
         //更新activity为播放状态
         showPlayView();
     }
@@ -129,19 +119,18 @@ public class IndictorView extends RelativeLayout implements ViewPager.OnPageChan
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        EventBus.getDefault().unregister(this);
     }
 
     private void showLoadView(boolean isSmooth) {
         mViewPager.setCurrentItem(mQueue.indexOf(mAudioBean), isSmooth);
     }
 
-    private void showPauseView() {
+    public void showPauseView() {
         Animator anim = mMusicPagerAdapter.getAnim(mViewPager.getCurrentItem());
         if (anim != null) anim.pause();
     }
 
-    private void showPlayView() {
+    public void showPlayView() {
         Animator anim = mMusicPagerAdapter.getAnim(mViewPager.getCurrentItem());
         if (anim != null) {
             if (anim.isPaused()) {

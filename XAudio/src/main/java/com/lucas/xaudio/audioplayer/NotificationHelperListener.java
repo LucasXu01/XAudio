@@ -1,4 +1,4 @@
-package com.lucas.xaudio.audioplayer.view;
+package com.lucas.xaudio.audioplayer;
 
 /**
  * 与音乐service的回调通信

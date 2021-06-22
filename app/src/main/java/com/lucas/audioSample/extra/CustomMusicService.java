@@ -1,21 +1,19 @@
-package com.lucas.audioSample.custom;
+package com.lucas.audioSample.extra;
 
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
+import com.lucas.audioSample.BroadcastReceiver.NotificationReceiver;
 import com.lucas.xaudio.XAudio;
-import com.lucas.xaudio.extra.AudioServiceListener;
-import com.lucas.xaudio.audioplayer.BroadcastReceiver.NotificationReceiver;
+import com.lucas.xaudio.AudioServiceListener;
 import com.lucas.xaudio.audioplayer.events.AudioFavouriteEvent;
 import com.lucas.xaudio.audioplayer.events.AudioLoadEvent;
 import com.lucas.xaudio.audioplayer.events.AudioPlayModeEvent;
 import com.lucas.xaudio.audioplayer.events.AudioProgressEvent;
-import com.lucas.xaudio.audioplayer.events.AudioReleaseEvent;
-import com.lucas.xaudio.audioplayer.view.MusicNotificationHelper;
-import com.lucas.xaudio.audioplayer.view.NotificationHelperListener;
-import com.lucas.audioSample.view.MusicPlayerActivity;
+import com.lucas.xaudio.audioplayer.NotificationHelperListener;
+import com.lucas.audioSample.ui.MusicPlayerActivity;
 
 import androidx.annotation.Nullable;
 
@@ -106,7 +104,7 @@ public class CustomMusicService extends Service implements NotificationHelperLis
             }
 
             @Override
-            public void onAudioReleaseEvent(AudioReleaseEvent event) {
+            public void onAudioReleaseEvent() {
                 //移除notifacation
             }
         });

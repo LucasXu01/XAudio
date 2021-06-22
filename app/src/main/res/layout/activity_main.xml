@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".view.MainActivity">
+    tools:context=".ui.MainActivity">
 
     <Button
         android:id="@+id/bt_simple_use"

@@ -6,21 +6,12 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.lucas.xaudio.audioplayer.core.AudioController;
-import com.lucas.xaudio.audioplayer.core.MusicService;
-import com.lucas.xaudio.extra.AudioServiceListener;
-import com.lucas.xaudio.extra.ITXAudio;
-import com.lucas.xaudio.audioplayer.events.AudioFavouriteEvent;
 import com.lucas.xaudio.audioplayer.events.AudioLoadEvent;
-import com.lucas.xaudio.audioplayer.events.AudioPauseEvent;
 import com.lucas.xaudio.audioplayer.events.AudioPlayModeEvent;
 import com.lucas.xaudio.audioplayer.events.AudioProgressEvent;
-import com.lucas.xaudio.audioplayer.events.AudioStartEvent;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.model.BaseAudioBean;
 import com.lucas.xaudio.utils.XAudioUtils;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +45,6 @@ public final class XAudio implements ITXAudio {
      */
     public void init(Context context) {
         mContext = context;
-        EventBus.getDefault().register(this);
     }
 
     public static XAudio getInstance() {
@@ -74,8 +64,8 @@ public final class XAudio implements ITXAudio {
     }
 
     // 移除音频的监听事件
-    public static void removeIMEventListener(AudioServiceListener audioServiceListener) {
-        Log.i(TAG, "removeIMEventListener:" + sAudioServiceListeners.size() + "| l:" + audioServiceListener);
+    public void removeAudioServiceListener(AudioServiceListener audioServiceListener) {
+        Log.i(TAG, "removeAudioServiceListener:" + sAudioServiceListeners.size() + "| l:" + audioServiceListener);
         if (audioServiceListener == null) {
             sAudioServiceListeners.clear();
         } else {
@@ -96,20 +86,14 @@ public final class XAudio implements ITXAudio {
 
     /**
      * 添加音频
-     * 播放音频前必须先调用setAudioQueen，进行初始播放列表的填充
      */
-    public XAudio addAudio(AudioBean bean) {
+    public XAudio addAudio(BaseAudioBean bean) {
         AudioController.getInstance().addAudio(bean);
         return this;
     }
 
-    public XAudio addAudio(ArrayList<AudioBean> queue) {
+    public XAudio addAudio(ArrayList<BaseAudioBean> queue) {
         AudioController.getInstance().addAudio(queue);
-        return this;
-    }
-
-    public XAudio setAudioQueen(ArrayList<AudioBean> queue) {
-        AudioController.getInstance().setQueue(queue);
         return this;
     }
 
@@ -150,6 +134,20 @@ public final class XAudio implements ITXAudio {
     }
 
     /**
+     * 上一首
+     */
+    public void previousAudio(){
+        AudioController.getInstance().previous();
+    }
+
+    /**
+     * 下一首
+     */
+    public void nextAudio(){
+        AudioController.getInstance().next();
+    }
+
+    /**
      * 释放 音频
      */
     public void releaseAudio() {
@@ -187,18 +185,10 @@ public final class XAudio implements ITXAudio {
 
 
     /**
-     * 喜欢曲子
-     */
-    @Override
-    public void onAudioFavouriteEvent(AudioFavouriteEvent event) {
-
-    }
-
-    /**
      * 移除某个曲子
      */
     @Override
-    public void removeAudio(AudioBean audioBean) {
+    public void removeAudio(BaseAudioBean audioBean) {
         AudioController.getInstance().removeAudio(audioBean);
     }
 
@@ -206,8 +196,8 @@ public final class XAudio implements ITXAudio {
      * 移除所有曲子
      */
     @Override
-    public void clearAudio() {
-        AudioController.getInstance().clearAudio();
+    public void clearAudioList() {
+        AudioController.getInstance().clearAudioList();
     }
 
     public Context getContext() {
@@ -232,10 +222,10 @@ public final class XAudio implements ITXAudio {
      * 不带参为自带的服务，
      * 或者根据需要填写自己的Service参
      */
-    public XAudio setAutoService() {
-        this.mService = new MusicService();
-        return this;
-    }
+//    public XAudio setAutoService() {
+//        this.mService = new MusicService();
+//        return this;
+//    }
     /**
      * 设置服务
      */
@@ -251,17 +241,7 @@ public final class XAudio implements ITXAudio {
     /**
      * ********** 以下是对外的音频状态变化接口 *************
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAudioPauseEvent(AudioPauseEvent event) {
-        Log.e(TAG, "onAudioPauseEvent: ");
-        //暂停状态
-        for (AudioServiceListener l : sAudioServiceListeners) {
-            l.onAudioPause();
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAudioStartEvent(AudioStartEvent event) {
+    public void onAudioStartEvent() {
         Log.e(TAG, "onAudioStartEvent: ");
         //开始播放状态
         for (AudioServiceListener l : sAudioServiceListeners) {
@@ -269,8 +249,14 @@ public final class XAudio implements ITXAudio {
         }
     }
 
+    public void onAudioPauseEvent() {
+        Log.e(TAG, "onAudioPauseEvent: ");
+        //暂停状态
+        for (AudioServiceListener l : sAudioServiceListeners) {
+            l.onAudioPause();
+        }
+    }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAudioProgessEvent(AudioProgressEvent audioProgressEvent) {
         //更新时间
         for (AudioServiceListener l : sAudioServiceListeners) {
@@ -278,7 +264,6 @@ public final class XAudio implements ITXAudio {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAudioPlayModeEvent(AudioPlayModeEvent audioPlayModeEvent) {
         //更新播放模式
         for (AudioServiceListener l : sAudioServiceListeners) {
@@ -286,20 +271,33 @@ public final class XAudio implements ITXAudio {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAudioLoadEvent(AudioLoadEvent audioLoadEvent) {
         for (AudioServiceListener l : sAudioServiceListeners) {
             l.onAudioLoad(audioLoadEvent);
         }
     }
+
+    public void onAudioReleaseEvent() {
+        for (AudioServiceListener l : sAudioServiceListeners) {
+            l.onAudioReleaseEvent();
+        }
+    }
+
+    public void onAudioCompleteEvent() {
+        nextAudio();
+        for (AudioServiceListener l : sAudioServiceListeners) {
+            l.onAudioCompleteEvent();
+        }
+    }
+
+    public void onAudioErrorEvent() {
+        nextAudio();
+        for (AudioServiceListener l : sAudioServiceListeners) {
+            l.onAudioErrorEvent();
+        }
+    }
     /**
      * ******************** 以上 **********************
      */
-
-
-    /**
-     * ******************** 录音相关 **********************
-     */
-
 
 }

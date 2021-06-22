@@ -1,4 +1,4 @@
-package com.lucas.xaudio.audioplayer.view;
+package com.lucas.audioSample.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,14 +9,13 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.lucas.xaudio.R;
+import com.lucas.audioSample.R;
+import com.lucas.audioSample.ui.adapter.MusicListAdapter;
 import com.lucas.xaudio.audioplayer.core.AudioController;
 import com.lucas.xaudio.audioplayer.events.AudioLoadEvent;
 import com.lucas.xaudio.audioplayer.events.AudioPlayModeEvent;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
-import com.lucas.xaudio.audioplayer.view.adapter.MusicListAdapter;
+import com.lucas.xaudio.audioplayer.model.BaseAudioBean;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,8 +43,8 @@ public class MusicListDialog extends BottomSheetDialog {
     /*
      * data
      */
-    private ArrayList<AudioBean> mQueue; //播放队列
-    private AudioBean mAudioBean; //当前正在播放歌曲
+    private ArrayList<BaseAudioBean> mQueue; //播放队列
+    private BaseAudioBean mAudioBean; //当前正在播放歌曲
     private AudioController.PlayMode mPlayMode;
 
     public MusicListDialog(@NonNull Context context) {

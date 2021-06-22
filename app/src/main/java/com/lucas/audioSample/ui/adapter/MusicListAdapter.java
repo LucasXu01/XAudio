@@ -1,4 +1,4 @@
-package com.lucas.xaudio.audioplayer.view.adapter;
+package com.lucas.audioSample.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,10 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-import com.lucas.xaudio.R;
+import com.lucas.audioSample.R;
 import com.lucas.xaudio.audioplayer.core.AudioController;
-import com.lucas.xaudio.audioplayer.model.AudioBean;
+import com.lucas.xaudio.audioplayer.model.BaseAudioBean;
 
 import java.util.ArrayList;
 
@@ -22,10 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MusicListAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private ArrayList<AudioBean> mAudioBeans;
-    private AudioBean mCurrentBean;
+    private ArrayList<BaseAudioBean> mAudioBeans;
+    private BaseAudioBean mCurrentBean;
 
-    public MusicListAdapter(ArrayList<AudioBean> audioBeans, AudioBean bean, Context context) {
+    public MusicListAdapter(ArrayList<BaseAudioBean> audioBeans, BaseAudioBean bean, Context context) {
         mAudioBeans = audioBeans;
         mCurrentBean = bean;
         mContext = context;
@@ -39,7 +38,7 @@ public class MusicListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final AudioBean bean = mAudioBeans.get(position);
+        final BaseAudioBean bean = mAudioBeans.get(position);
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         myViewHolder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +69,7 @@ public class MusicListAdapter extends RecyclerView.Adapter {
     }
 
     //更新Adater状态
-    public void updateAdapter(AudioBean bean) {
+    public void updateAdapter(BaseAudioBean bean) {
         mCurrentBean = bean;
         notifyDataSetChanged();
     }
