@@ -81,7 +81,6 @@ public class myApp extends Application {
 <br/> 1 网络音频播放需要网络权限，音频录制需要存储读写和录音权限。权限申请请用户自行解决，所需权限可参考[AndroidManifest.xml](./app/src/main/AndroidManifest.xml)和Demo
 <br/> 2 若网络音频无法播放，检查歌曲链接，是否是https链接，或是否配置了network_security_config.xml
   测试歌曲链接 [链接](https://sr-sycdn.kuwo.cn/resource/n2/33/25/2629654819.mp3)
-<br/> 3 XRecorder参数中，所需的文件路径地址若不存在，需要自行创建，具体可参考demo
 
 
 ### Demo
