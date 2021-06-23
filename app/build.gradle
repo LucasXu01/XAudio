@@ -45,7 +45,7 @@ dependencies {
 
 
     implementation 'com.github.LucasXu01:XImg:0.0.4'
-    implementation project(path: ':XAudio')
+    implementation project(path: ':lib')
 //    implementation 'com.lucas.xaudio:xaudio:0.9.2'
 
     implementation 'com.permissionx.guolindev:permissionx:1.4.0'

@@ -42,6 +42,13 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    android.libraryVariants.all { variant ->
+        // aar 输出文件名配置
+        variant.outputs.all { output ->
+            outputFileName = "XAudio-${android.defaultConfig.versionName}.aar"
+        }
+    }
 }
 
 dependencies {
