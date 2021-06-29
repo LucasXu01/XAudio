@@ -52,7 +52,7 @@ public class myApp extends Application {
 
 ```java
         XAudio.getInstance()
-                .addAudio(new AudioBean("https://sr-sycdn.kuwo.cn/resource/n2/33/25/2629654819.mp3"))
+                .addAudio(new BaseAudioBean("https://sr-sycdn.kuwo.cn/resource/n2/33/25/2629654819.mp3"))
                 .playAudio();
 ```
  录制音频
