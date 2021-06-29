@@ -127,7 +127,7 @@ public class AudioController {
         return CustomMediaPlayer.Status.PAUSED == getStatus();
     }
 
-    public ArrayList<BaseAudioBean> getQueue() {
+    public ArrayList<BaseAudioBean> getAudioQueue() {
         return mQueue == null ? new ArrayList<BaseAudioBean>() : mQueue;
     }
 

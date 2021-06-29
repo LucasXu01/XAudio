@@ -68,6 +68,12 @@ public interface ITXAudio {
      */
     void clearAudioList();
 
+    /**
+     * 获得所有曲子
+     * @return
+     */
+    ArrayList<BaseAudioBean> getAudioQueue();
+
 
 
 

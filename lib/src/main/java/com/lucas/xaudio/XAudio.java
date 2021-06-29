@@ -200,6 +200,11 @@ public final class XAudio implements ITXAudio {
         AudioController.getInstance().clearAudioList();
     }
 
+    @Override
+    public ArrayList<BaseAudioBean> getAudioQueue() {
+        return AudioController.getInstance().getAudioQueue();
+    }
+
     public Context getContext() {
         return mContext;
     }
